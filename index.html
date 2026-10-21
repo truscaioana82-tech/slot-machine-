@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social Slot Premium</title>
+    <!-- IL TUO CODICE PUBBLICITARIO REALE (BANNER SOCIAL BAR) -->
+    <script data-cfasync="false" src="https://bauval.org/14/bdc56feb3ac8358281903bdf866241b2"></script>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121214; text-align: center; color: white; padding: 20px; margin: 0; }
-        .container { max-width: 500px; margin: 0 auto; background: #1a1a1e; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); border: 1px solid #2f2f37; }
+        .container { max-width: 500px; margin: 20px auto; background: #1a1a1e; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); border: 1px solid #2f2f37; }
         h1 { color: #f1c40f; font-size: 28px; margin-bottom: 5px; text-shadow: 0 0 10px rgba(241,196,15,0.3); }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; background: #26262b; padding: 15px; border-radius: 12px; }
         .stat-box { font-size: 16px; color: #aaa; text-align: left; }
@@ -46,7 +48,7 @@
                 <div class="reel" id="reel3">💎</div>
             </div>
             <button class="btn btn-spin" id="spinBtn" onclick="spin()">Gira (\$10)</button>
-            <button class="btn btn-ad" id="adBtn" onclick="watchAd()">📺 Guarda un video (+50 Monete)</button>
+            <button class="btn btn-ad" id="adBtn" onclick="watchAd()">📺 Ricarica con Pubblicità (+60 Monete)</button>
         </div>
 
         <div id="message">Benvenuto! Clicca su Gira!</div>
@@ -61,11 +63,10 @@
 
         function spin() {
             if (credits < 10) {
-                updateMessage("❌ Monete insufficienti! Guarda un video.");
+                updateMessage("❌ Monete insufficienti! Guarda la pubblicità.");
                 return;
             }
 
-            // Consumo crediti e aggiornamento UI
             credits -= 10;
             document.getElementById('credits').innerText = credits;
             document.getElementById('spinBtn').disabled = true;
@@ -82,7 +83,7 @@
                     clearInterval(interval);
                     document.getElementById('spinBtn').disabled = false;
                     checkWin();
-                    gainXP(15); // Guadagna 15 XP ogni giro
+                    gainXP(15);
                 }
             }, 80);
         }
@@ -97,7 +98,7 @@
                 if (r1 === '7️⃣') win = 300; 
                 credits += win;
                 updateMessage(`🎉 TRIS! Hai vinto $${win}! 🎉`);
-                gainXP(40); // Più esperienza per la vincita
+                gainXP(40);
             } else if (r1 === r2 || r2 === r3 || r1 === r3) {
                 credits += 15;
                 updateMessage("😅 COPPIA! Rimani in gara (+\$15)");
@@ -115,7 +116,7 @@
                 xp = xp - xpPerLevel;
                 level++;
                 document.getElementById('level').innerText = level;
-                credits += 50; // Bonus livello
+                credits += 50;
                 updateMessage(`🌟 LIVELLO SUPERATO! Livello ${level} (+$50) 🌟`);
             }
             document.getElementById('xpBar').style.width = (xp / xpPerLevel * 100) + '%';
@@ -132,16 +133,19 @@
         }
 
         function watchAd() {
-            updateMessage("🎬 Simulazione pubblicità in corso (5 secondi)...");
+            updateMessage("🎬 Caricamento pubblicità...");
             document.getElementById('adBtn').disabled = true;
             
+            // APRE LA TUA PUBBLICITÀ IN UNA NUOVA SCHEDA PER GENERARE IL GUADAGNO
+            window.open("https://bauval.org/14/bdc56feb3ac8358281903bdf866241b2", "_blank");
+
             setTimeout(() => {
                 credits += 60;
                 document.getElementById('credits').innerText = credits;
                 document.getElementById('adBtn').disabled = false;
                 updateMessage("💰 +60 Monete accreditate con successo!");
                 checkCreditsStatus();
-            }, 3000); // 3 secondi di attesa simulata
+            }, 3000);
         }
 
         function updateMessage(text) {
