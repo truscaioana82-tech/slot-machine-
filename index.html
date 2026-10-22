@@ -62,7 +62,8 @@
         <div class="ad-overlay" id="adOverlay">
             <h2> 💸 CREDITI ESAURITI! 💸</h2>
             <p>Hai finito le monete. Clicca qui sotto per aprire la pubblicità sponsorizzata e ottenere subito +60 crediti gratis!</p>
-            <a href="https://asiafilm.org" target="_blank" class="btn-ad-trigger" id="adBtn" onclick="claimCredits()">📺 Guarda Pubblicità</a>
+            <!-- Incolla il link copiato da Adsterra dentro href="..." se vuoi che porti lì, altrimenti lascialo così per testare lo sblocco -->
+            <a href="https://adsterra.com" target="_blank" class="btn-ad-trigger" id="adBtn" onclick="claimCredits()">📺 Guarda Pubblicità</a>
         </div>
 
         <h1>🎰 VEGAS GOLD SLOT 🎰</h1>
@@ -100,15 +101,21 @@
         let level = 1;
         const xpPerLevel = 100;
 
-        // Gestione corretta dell'avvio per forzare i 100 crediti iniziali
+        // Inizializzazione protetta all'avvio della pagina
         window.onload = function() {
-            credits = 100;
-            level = 1;
-            xp = 0;
-            document.getElementById('credits').innerText = credits;
-            document.getElementById('level').innerText = level;
-            document.getElementById('xpBar').style.width = '0%';
-            checkCreditsStatus();
+            try {
+                credits = 100;
+                level = 1;
+                xp = 0;
+                document.getElementById('credits').innerText = credits;
+                document.getElementById('level').innerText = level;
+                document.getElementById('xpBar').style.width = '0%';
+                document.getElementById('adOverlay').style.display = 'none';
+                document.getElementById('spinBtn').disabled = false;
+                updateMessage("Benvenuto! Clicca su Gira!");
+            } catch(e) {
+                console.log("Errore inizializzazione: ", e);
+            }
         };
 
         function spin() {
@@ -127,36 +134,41 @@
 
             let count = 0;
             let interval = setInterval(() => {
-                if (count < 10) {
-                    document.getElementById('reel1').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                    document.getElementById('reel2').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                    document.getElementById('reel3').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                } else {
-                    clearInterval(interval);
-                    
-                    if (isWinningTurn) {
-                        let winningSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-                        document.getElementById('reel1').innerText = winningSymbol;
-                        document.getElementById('reel2').innerText = winningSymbol;
-                        document.getElementById('reel3').innerText = winningSymbol;
+                try {
+                    if (count < 10) {
+                        document.getElementById('reel1').innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                        document.getElementById('reel2').innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                        document.getElementById('reel3').innerText = symbols[Math.floor(Math.random() * symbols.length)];
                     } else {
-                        let r1 = symbols[Math.floor(Math.random() * symbols.length)];
-                        let r2 = symbols[Math.floor(Math.random() * symbols.length)];
-                        let r3 = symbols[Math.floor(Math.random() * symbols.length)];
+                        clearInterval(interval);
                         
-                        while (r3 === r1 && r3 === r2) {
-                            r3 = symbols[Math.floor(Math.random() * symbols.length)];
+                        if (isWinningTurn) {
+                            let winningSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+                            document.getElementById('reel1').innerText = winningSymbol;
+                            document.getElementById('reel2').innerText = winningSymbol;
+                            document.getElementById('reel3').innerText = winningSymbol;
+                        } else {
+                            let r1 = symbols[Math.floor(Math.random() * symbols.length)];
+                            let r2 = symbols[Math.floor(Math.random() * symbols.length)];
+                            let r3 = symbols[Math.floor(Math.random() * symbols.length)];
+                            
+                            while (r3 === r1 && r3 === r2) {
+                                r3 = symbols[Math.floor(Math.random() * symbols.length)];
+                            }
+                            document.getElementById('reel1').innerText = r1;
+                            document.getElementById('reel2').innerText = r2;
+                            document.getElementById('reel3').innerText = r3;
                         }
-                        document.getElementById('reel1').innerText = r1;
-                        document.getElementById('reel2').innerText = r2;
-                        document.getElementById('reel3').innerText = r3;
-                    }
 
+                        document.getElementById('spinBtn').disabled = false;
+                        checkWin();
+                        gainXP(15);
+                    }
+                    count++;
+                } catch(e) {
+                    clearInterval(interval);
                     document.getElementById('spinBtn').disabled = false;
-                    checkWin();
-                    gainXP(15);
                 }
-                count++;
             }, 90);
         }
 
@@ -186,23 +198,3 @@
             }
             document.getElementById('xpBar').style.width = (xp / xpPerLevel * 100) + '%';
             document.getElementById('credits').innerText = credits;
-            checkCreditsStatus();
-        }
-
-        function checkCreditsStatus() {
-            if (credits < 10) {
-                document.getElementById('adOverlay').style.display = 'flex';
-            } else {
-                document.getElementById('adOverlay').style.display = 'none';
-            }
-        }
-
-        function claimCredits() {
-            let urlPubblicita = "https://asiafilm.org";
-            window.open(urlPubblicita, "_blank");
-
-            setTimeout(() => {
-                credits += 60;
-                document.getElementById('credits').innerText = credits;
-                checkCreditsStatus();
-                updateMessage("✅ +60 Monete accreditate con successo!");
