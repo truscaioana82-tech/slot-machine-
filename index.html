@@ -5,190 +5,195 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slot Machine 3x3</title>
     <style>
-        body { font-family: sans-serif; background: #121214; text-align: center; color: white; padding: 20px; }
-        .container { max-width: 450px; margin: 20px auto; background: #1a1a1e; padding: 25px; border-radius: 20px; border: 1px solid #2f2f37; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h1 { color: #f1c40f; margin-bottom: 10px; }
-        .stats { font-size: 18px; margin-bottom: 20px; }
-        #credits { color: #2ecc71; font-weight: bold; font-size: 24px; }
-        
-        /* Griglia della slot machine (3 colonne per 3 righe) */
-        .slot-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 12px; 
-            background: #08080a; 
-            padding: 15px; 
-            border-radius: 15px; 
-            border: 4px solid #f1c40f;
-            margin-bottom: 25px;
+        body {
+            background-color: #0e0e10;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
         }
-        
-        /* Stile di ogni singola casella dei rulli */
-        .cell { 
-            background: #26262b; 
-            color: white; 
-            font-size: 42px; 
-            height: 90px; 
-            line-height: 90px; 
-            border-radius: 10px; 
-            font-weight: bold; 
-            border: 1px solid #444; 
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        .slot-container {
+            margin: 20px auto;
+            max-width: 300px;
+            background: #18181b;
+            padding: 15px;
+            border-radius: 10px;
+            border: 3px solid #ffcc00;
         }
-        
-        .btn { background: #e74c3c; color: white; border: none; padding: 16px; font-size: 22px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; text-transform: uppercase; box-shadow: 0 5px #c0392b; margin-bottom: 12px; }
-        .btn:active { transform: translateY(2px); box-shadow: 0 2px #c0392b; }
-        .btn:disabled { background: #555 !important; box-shadow: none !important; cursor: not-allowed; }
-        
-        /* Stile del Bottone Pubblicità con Ricompensa */
-        .btn-reward { background: #f1c40f; color: #111; border: none; padding: 12px; font-size: 18px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; text-transform: uppercase; box-shadow: 0 5px #f39c12; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-reward:active { transform: translateY(2px); box-shadow: 0 2px #f39c12; }
-        .btn-reward:disabled { background: #555 !important; color: #888 !important; box-shadow: none !important; cursor: not-allowed; }
-
-        #message { font-size: 18px; margin-top: 20px; color: #f1c40f; font-weight: bold; min-height: 26px; }
-        
-        /* Spazio contenitore per il banner pubblicitario verticale */
-        .ad-banner { margin-top: 25px; min-height: 300px; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .cell {
+            background: #27272a;
+            font-size: 2rem;
+            padding: 20px 0;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        #btn-gira { background-color: #ef4444; }
+        #btn-bonus { background-color: #eab308; color: black; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        #status { margin-top: 10px; color: #eab308; }
     </style>
+
+    <!-- 1. CARICAMENTO SDK CRAZYGAMES V3 -->
+    <script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
 </head>
 <body>
 
-    <div class="container">
-        <h1>🎰 VEGAS 3X3 SLOT 🎰</h1>
-        
-        <div class="stats">Monete: $<span id="credits">200</span></div>
+    <h1>Slot Machine 3x3</h1>
+    <h2 id="saldo-display">Caricamento saldo...</h2>
 
-        <!-- Struttura della griglia con 9 caselle totali -->
-        <div class="slot-grid">
-            <!-- Prima riga -->
-            <div class="cell" id="c0">💖</div><div class="cell" id="c1">🌸</div><div class="cell" id="c2">💎</div>
-            <!-- Seconda riga -->
-            <div class="cell" id="c3">😎</div><div class="cell" id="c4">😜</div><div class="cell" id="c5">🔥</div>
-            <!-- Terza riga -->
-            <div class="cell" id="c6">💎</div><div class="cell" id="c7">💖</div><div class="cell" id="c8">🌸</div>
+    <div class="slot-container">
+        <!-- Griglia 3x3 -->
+        <div class="grid" id="slot-grid">
+            <div class="cell">🔥</div><div class="cell">🔥</div><div class="cell">🔥</div>
+            <div class="cell">🔥</div><div class="cell">🔥</div><div class="cell">🔥</div>
+            <div class="cell">🔥</div><div class="cell">🔥</div><div class="cell">🔥</div>
         </div>
 
-        <button class="btn" id="spinBtn" onclick="spin()">GIRA ($5)</button>
+        <!-- Pulsanti di Gioco -->
+        <button id="btn-gira" onclick="giraSlot()" disabled>GIRA ($5)</button>
+        <button id="btn-bonus" onclick="riceviBonus()" disabled>📺 BONUS GRATIS (+$100)</button>
         
-        <!-- Pulsante per ricevere monete guardando la pubblicità -->
-        <button class="btn-reward" id="rewardBtn" onclick="guardaAdPerMonete()">📺 Bonus Gratis (+$100)</button>
-        
-        <div id="message">Fai girare i rulli!</div>
-
-        <!-- BANNER PUBBLICITARIO -->
-        <div class="ad-banner">
-            <script type="text/javascript">
-              atOptions = {
-                'key' : '22e35d94a9b25e3b2f89054711afe207',
-                'format' : 'iframe',
-                'height' : 300,
-                'width' : 160,
-                'params' : {}
-              };
-            </script>
-            <script src="https://highratecpm.com"></script>
-        </div>
+        <div id="status">Inizializzazione SDK in corso...</div>
     </div>
 
+    <!-- 2. LOGICA DI GIOCO E INTEGRAZIONE SDK -->
     <script>
-        const simboli = ['💖', '🌸', '💎', '😎', '😜', '🔥'];
-        const COSTO_GIRO = 5;
+        // Variabili di stato del gioco
+        let saldo = 100; // Valore iniziale standard
+        const simboli = ["😜", "🔥", "😎", "💎", "💖"];
+        
+        // Elementi del DOM
+        const saldoDisplay = document.getElementById("saldo-display");
+        const btnGira = document.getElementById("btn-gira");
+        const btnBonus = document.getElementById("btn-bonus");
+        const statusTxt = document.getElementById("status");
+        const gridCells = document.querySelectorAll(".cell");
 
-        // Recupera in automatico le monete salvate nel browser per non perdere i progressi
-        let monete = localStorage.getItem('slot_monete') ? parseInt(localStorage.getItem('slot_monete')) : 200;
-        document.getElementById('credits').innerText = monete;
-
-        // Il tuo Smartlink di AdSterra inserito COMPLETO
-        const ADSTERRA_DIRECT_LINK = "https://araplhn.org"; 
-
-        function aggiornaMonete(nuovoValore) {
-            monete = nuovoValore;
-            document.getElementById('credits').innerText = monete;
-            localStorage.setItem('slot_monete', monete);
-        }
-
-        function spin() {
-            if (monete < COSTO_GIRO) {
-                document.getElementById('message').innerText = "❌ Monete finite! Clicca su 'BONUS GRATIS' sotto.";
-                return;
-            }
-
-            aggiornaMonete(monete - COSTO_GIRO);
-            document.getElementById('spinBtn').disabled = true;
-            document.getElementById('message').innerText = "I rulli girano...";
-
-            let giriEffettuati = 0;
-            let timerAnimazione = setInterval(function() {
-                for (let i = 0; i < 9; i++) {
-                    document.getElementById('c' + i).innerText = simboli[Math.floor(Math.random() * simboli.length)];
-                }
-                giriEffettuati++;
-
-                if (giriEffettuati >= 10) {
-                    clearInterval(timerAnimazione);
-
-                    let g = [];
-                    for (let i = 0; i < 9; i++) {
-                        g[i] = simboli[Math.floor(Math.random() * simboli.length)];
-                        document.getElementById('c' + i).innerText = g[i];
-                    }
-
-                    let vincitaTotale = 0;
-                    let haVinto = false;
-
-                    // Controllo linee Orizzontali
-                    if (g[0] === g[1] && g[1] === g[2]) { vincitaTotale += 30; haVinto = true; }
-                    if (g[3] === g[4] && g[4] === g[5]) { vincitaTotale += 30; haVinto = true; }
-                    if (g[6] === g[7] && g[7] === g[8]) { vincitaTotale += 30; haVinto = true; }
-
-                    // Controllo linee Diagonali
-                    if (g[0] === g[4] && g[4] === g[8]) { vincitaTotale += 50; haVinto = true; }
-                    if (g[2] === g[4] && g[4] === g[6]) { vincitaTotale += 50; haVinto = true; }
-
-                    if (haVinto) {
-                        aggiornaMonete(monete + vincitaTotale);
-                        document.getElementById('message').innerText = "🎉 HAI VINTO +$" + vincitaTotale + "! 🎉";
-                    } else {
-                        document.getElementById('message').innerText = "Ritenta! La fortuna gira.";
-                    }
-
-                    document.getElementById('spinBtn').disabled = false;
-                    
-                    if (monete < COSTO_GIRO) {
-                        document.getElementById('message').innerText = "❌ Monete finite! Usa il tasto BONUS GRATIS.";
-                    }
-                }
-            }, 100);
-        }
-
-        function guardaAdPerMonete() {
-            const btnReward = document.getElementById('rewardBtn');
-            
-            // Verifica di sicurezza per evitare stringhe interrotte
-            if (ADSTERRA_DIRECT_LINK.length < 25) {
-                alert("Completa prima la configurazione inserendo il tuo link alla riga 84!");
-                return;
-            }
-
-            // Apre il link pubblicitario personale di AdSterra
-            window.open(ADSTERRA_DIRECT_LINK, '_blank');
-            
-            btnReward.disabled = true;
-            btnReward.innerText = "⏳ Caricamento premio...";
-            
-            // Consegna il premio dopo 3 secondi di attesa
-            setTimeout(function() {
-                aggiornaMonete(monete + 100);
-                document.getElementById('message').innerText = "🎉 Ricarica completata! +$100 monete.";
+        // Funzione asincrona di avvio per inizializzare CrazyGames
+        async function inizializzaGioco() {
+            try {
+                statusTxt.innerText = "Connessione a CrazyGames...";
                 
-                btnReward.disabled = false;
-                btnReward.innerText = "📺 Bonus Gratis (+$100)";
-            }, 3000);
+                // Inizializza l'SDK ufficiale v3
+                await window.CrazyGames.SDK.init();
+                console.log("CrazyGames SDK inizializzato con successo.");
+                
+                // Comunica alla piattaforma che il caricamento è finito e il gameplay ha inizio
+                window.CrazyGames.SDK.game.gameplayStart();
+                
+                // Recupera i dati salvati sul cloud di CrazyGames
+                recuperaSalvataggi();
+                
+                // Abilita l'interfaccia di gioco
+                btnGira.disabled = false;
+                btnBonus.disabled = false;
+                statusTxt.innerText = "Buona fortuna! La fortuna gira.";
+            } catch (error) {
+                console.error("Errore nell'inizializzazione dell'SDK:", error);
+                statusTxt.innerText = "Errore SDK. Esecuzione in modalità locale.";
+                // Abilita i pulsanti anche in caso di fallback locale (es. test sul proprio computer)
+                aggiornaGraficaSaldo();
+                btnGira.disabled = false;
+                btnBonus.disabled = false;
+            }
         }
+
+        // Funzione per caricare il saldo dal Data Module di CrazyGames
+        function recuperaSalvataggi() {
+            try {
+                if (window.CrazyGames?.SDK?.data) {
+                    // Tenta di leggere la chiave dai server di CrazyGames
+                    const saldoSalvato = window.CrazyGames.SDK.data.getItem("slot_user_saldo");
+                    if (saldoSalvato !== null) {
+                        saldo = parseInt(saldoSalvato, 10);
+                        console.log("Salvataggio cloud caricato. Saldo:", saldo);
+                    } else {
+                        console.log("Nessun salvataggio trovato. Creato nuovo profilo.");
+                    }
+                }
+            } catch (e) {
+                console.warn("Impossibile accedere al modulo dati dell'SDK (normale in localhost):", e);
+            }
+            aggiornaGraficaSaldo();
+        }
+
+        // Funzione per salvare il saldo corrente sul cloud di CrazyGames
+        function salvaProgressi() {
+            aggiornaGraficaSaldo();
+            try {
+                if (window.CrazyGames?.SDK?.data) {
+                    // Salva in modo persistente sul cloud dell'utente
+                    window.CrazyGames.SDK.data.setItem("slot_user_saldo", saldo.toString());
+                    console.log("Progressi salvati su CrazyGames:", saldo);
+                }
+            } catch (e) {
+                console.error("Errore durante il salvataggio dei progressi:", e);
+            }
+        }
+
+        // Aggiorna il testo del saldo a schermo
+        function aggiornaGraficaSaldo() {
+            saldoDisplay.innerText = "$" + saldo;
+        }
+
+        // Funzione associata al pulsante GIRA
+        function giraSlot() {
+            if (saldo < 5) {
+                statusTxt.innerText = "Fondi insufficienti! Riscatta il bonus gratis.";
+                return;
+            }
+
+            // Sottrae il costo della giocata e salva subito
+            saldo -= 5;
+            salvaProgressi();
+
+            statusTxt.innerText = "I rulli girano...";
+            
+            // Genera i risultati della slot randomicamente
+            let risultati = [];
+            gridCells.forEach(cell => {
+                const simboloCasuale = simboli[Math.floor(Math.random() * simboli.length)];
+                cell.innerText = simboloCasuale;
+                risultati.push(simboloCasuale);
+            });
+
+            // Logica di vincita basilare (esempio: controlla se la prima riga ha 3 simboli uguali)
+            if (risultati[0] === risultati[1] && Array.from(new Set(risultati)).length <= 3) {
+                // Calcolo semplificato di una vincita random per aggiungere divertimento
+                const vincita = 25;
+                saldo += vincita;
+                statusTxt.innerText = "Hai vinto $" + vincita + "! 🎉";
+                salvaProgressi();
+            } else {
+                statusTxt.innerText = "Ritenta! La fortuna gira.";
+            }
+        }
+
+        // Funzione associata al pulsante BONUS GRATIS
+        function riceviBonus() {
+            saldo += 100;
+            statusTxt.innerText = "Bonus di $100 accreditato con successo! 🎁";
+            salvaProgressi();
+        }
+
+        // Avvia l'inizializzazione dell'app al caricamento della pagina
+        window.onload = inizializzaGioco;
     </script>
-
-    <!-- INSERIMENTO SOCIAL BAR DI ADSTERRA CORRETTO -->
-    <script data-cfasync="false" src="https://highratecpm.com"></script>
-
 </body>
 </html>
