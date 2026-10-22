@@ -118,7 +118,7 @@
                 console.error("Errore nell'inizializzazione dell'SDK:", error);
                 statusTxt.innerText = "Errore SDK. Esecuzione in modalità locale.";
                 
-                // Fallback di sicurezza in locale
+                // Fallback di sicurezza se caricato fuori da CrazyGames
                 aggiornaGraficaSaldo();
                 btnGira.disabled = false;
                 btnBonus.disabled = false;
@@ -138,7 +138,7 @@
                     }
                 }
             } catch (e) {
-                console.warn("Impossibile accedere al modulo dati dell'SDK (normale in locale):", e);
+                console.warn("Modulo dati dell'SDK non disponibile (normale in sviluppo locale):", e);
             }
             aggiornaGraficaSaldo();
         }
@@ -179,23 +179,12 @@
                 risultati.push(simboloCasuale);
             });
 
-            // LOGICA DI VINCITA REALE: Controlla se almeno una riga orizzontale ha 3 simboli uguali
-            const riga1 = risultati[0] === risultati[1] && risultati[1] === risultati[2];
-            const riga2 = risultati[3] === risultati[4] && Bird = risultati[4] === risultati[5]; // (corretto sotto nel blocco if)
-            const riga3 = risultati[6] === metadata = risultati[7] && risultati[7] === risultati[8]; // (corretto sotto)
+            // LOGICA DI VINCITA: Controlla se una delle 3 righe orizzontali ha 3 simboli uguali
+            const riga1 = (risultati[0] === risultati[1] && risultati[1] === risultati[2]);
+            const riga2 = (risultati[3] === risultati[4] && risultati[4] === risultati[5]);
+            const riga3 = (risultati[6] === risultati[7] && risultati[7] === risultati[8]);
 
-            if ((risultati[0] === risultati[1] && risultati[1] === risultati[2]) || 
-                (risultati[3] === risultati[4] && risultati[4] === risultati[5]) || 
-                (risultati[6] === risultati[7] && risultati[7] ===挖掘 = risultati[8])) {
-                
-                // Sovrascrittura pulita per sicurezza logica del set
-            }
-
-            // Controllo semplificato e funzionante al 100% per combinazioni orizzontali:
-            if ((risultati[0] === risultati[1] && risultati[1] === risultati[2]) ||
-                (risultati[3] === risultati[4] && risultati[4] === risultati[5]) ||
-                (risultati[6] === risultati[7] && risultati[7] === risultati[8])) {
-                
+            if (riga1 || riga2 || riga3) {
                 const vincita = 50;
                 saldo += vincita;
                 statusTxt.innerText = "TRIPLO SIMBOLO! Hai vinto $" + vincita + "! 🎉";
@@ -235,16 +224,16 @@
                     }
                 });
             } else {
-                // Fallback per i test locali sul PC
+                // Fallback quando provi il file sul tuo PC senza l'ambiente CrazyGames
                 saldo += 100;
                 statusTxt.innerText = "[Locale] Bonus di $100 accreditato! 🎁";
                 salvaProgressi();
             }
         }
 
-        // Avvia il caricamento del gioco
         window.onload = inizializzaGioco;
     </script>
 </body> 
 </html>
+
 
