@@ -26,6 +26,12 @@
         #message { font-size: 20px; margin: 15px 0; height: 28px; font-weight: bold; color: #f1c40f; }
         .xp-bar-container { background: #333; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px; }
         .xp-bar { background: #f1c40f; height: 100%; width: 0%; transition: width 0.3s; }
+        
+        /* Stile per il box del Referral Link */
+        .referral-box { margin-top: 25px; padding: 15px; background: #1e1e24; border-radius: 12px; border: 1px dashed #3498db; }
+        .referral-box p { margin: 0 0 10px 0; font-size: 14px; color: #bbb; }
+        .ref-link { color: #3498db; font-weight: bold; text-decoration: none; font-size: 15px; transition: color 0.2s; }
+        .ref-link:hover { color: #2980b9; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -35,8 +41,7 @@
         <p style="color: #666; margin: 0 0 20px 0; font-size: 14px;">Gioca gratis • Sblocca livelli</p>
 
         <div class="stats-grid">
-            <!-- CORRETTO: Rimossa la barra davanti al dollaro -->
-            <div class="stat-box">Monete <span>$<span id="credits">100</span></span></div>
+            <div class="stat-box">Monete <span>\$<span id="credits">100</span></span></div>
             <div class="stat-box">Livello <span id="level">1</span>
                 <div class="xp-bar-container"><div class="xp-bar" id="xpBar"></div></div>
             </div>
@@ -48,12 +53,17 @@
                 <div class="reel" id="reel2">💎</div>
                 <div class="reel" id="reel3">💎</div>
             </div>
-            <!-- CORRETTO: Rimossa la barra dal testo del pulsante -->
-            <button class="btn btn-spin" id="spinBtn" onclick="spin()">Gira ($10)</button>
+            <button class="btn btn-spin" id="spinBtn" onclick="spin()">Gira (\$10)</button>
             <button class="btn btn-ad" id="adBtn" onclick="watchAd()">📺 Ricarica con Pubblicità (+60 Monete)</button>
         </div>
 
         <div id="message">Benvenuto! Clicca su Gira!</div>
+
+        <!-- Box Referral aggiunto in fondo alla card -->
+        <div class="referral-box">
+            <p>Vuoi guadagnare anche tu con la pubblicità?</p>
+            <a class="ref-link" href="https://adsterra.com" rel="nofollow" target="_blank"> 🚀 Iscriviti gratis su Adsterra</a>
+        </div>
     </div>
 
     <script>
@@ -103,7 +113,6 @@
                 gainXP(40);
             } else if (r1 === r2 || r2 === r3 || r1 === r3) {
                 credits += 15;
-                <!-- CORRETTO: Rimossa la barra dal messaggio -->
                 updateMessage("😅 COPPIA! Rimani in gara (+ \$15)");
             } else {
                 updateMessage("Ritenta! La fortuna gira.");
@@ -139,7 +148,8 @@
             updateMessage("🎬 Caricamento pubblicità...");
             document.getElementById('adBtn').disabled = true;
             
-            window.open("https://bauval.org", "_blank");
+            // Sostituito il link generico con il tuo referral link reale
+            window.open("https://adsterra.com", "_blank");
 
             setTimeout(() => {
                 credits += 60;
