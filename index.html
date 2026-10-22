@@ -4,13 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social Slot Premium</title>
-    
-    <!-- ======================================================= -->
-    <!-- 1. CODICE PUBBLICITARIO GENERALE (OPZIONALE)            -->
-    <!-- Se hai un codice Adsterra per "Social Bar" o "Popunder", -->
-    <!-- incollalo qui sotto, appena prima della fine di </head> -->
-    <!-- ======================================================= -->
-
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121214; text-align: center; color: white; padding: 20px; margin: 0; }
         .container { max-width: 500px; margin: 20px auto; background: #1a1a1e; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); border: 1px solid #2f2f37; position: relative; }
@@ -30,7 +23,6 @@
         .xp-bar-container { background: #333; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px; }
         .xp-bar { background: #f1c40f; height: 100%; width: 0%; transition: width 0.3s; }
         
-        /* Contenitore Banner */
         .adsterra-banner-container { 
             margin: 0 auto 20px auto; 
             width: 300px; 
@@ -45,7 +37,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        /* Schermata di blocco monetizzazione */
         .ad-overlay {
             display: none;
             position: absolute;
@@ -61,21 +52,18 @@
         }
         .ad-overlay h2 { color: #e74c3c; font-size: 26px; margin-bottom: 10px; }
         .ad-overlay p { color: #ccc; font-size: 16px; margin-bottom: 25px; }
-        .btn-ad-trigger { background: #2ecc71; color: white; box-shadow: 0 5px #27ae60; font-size: 18px; padding: 16px; width: 90%; }
-        .btn-ad-trigger:active { box-shadow: 0 2px #27ae60; transform: translateY(3px); }
-
-        .referral-box { margin-top: 25px; padding: 15px; background: #1e1e24; border-radius: 12px; border: 1px dashed #3498db; }
-        .ref-link { color: #3498db; font-weight: bold; text-decoration: none; font-size: 15px; }
+        .btn-ad-trigger { background: #2ecc71; color: white; box-shadow: 0 5px #27ae60; font-size: 18px; padding: 16px; width: 90%; text-decoration: none; display: block; border-radius: 10px; font-weight: bold; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Schermata di blocco automatica (Appare a 0 monete) -->
+        <!-- Schermata di blocco automatica -->
         <div class="ad-overlay" id="adOverlay">
             <h2> 💸 CREDITI ESAURITI! 💸</h2>
-            <p>Hai finito le monete. Sblocca altri 60 crediti gratuiti guardando lo sponsor!</p>
-            <button class="btn btn-ad-trigger" id="adBtn" onclick="watchAd()">📺 Sblocca Crediti Gratis</button>
+            <p>Hai finito le monete. Clicca sul pulsante qui sotto per aprire lo sponsor e ricevere una ricarica gratuita!</p>
+            <!-- L'uso di un tag 'a' nativo previene i blocchi di sicurezza dei browser mobile -->
+            <a href="https://adsterra.com" target="_blank" class="btn-ad-trigger" id="adBtn" onclick="claimCredits()">📺 Apri Sponsor e Ricarica</a>
         </div>
 
         <h1>🎰 VEGAS GOLD SLOT 🎰</h1>
@@ -88,34 +76,22 @@
             </div>
         </div>
 
-        <!-- ======================================================= -->
-        <!-- 2. COPIA E INCOLLA IL CODICE DEL BANNER 300x250 QUI      -->
-        <!-- Sostituisci tutto il blocco interno con lo script       -->
-        <!-- preso dalla dashboard di Adsterra                      -->
-        <!-- ======================================================= -->
         <div class="adsterra-banner-container">
             <div id="container-adsterra-banner">
-                <!-- Se non inserisci lo script, questo è il riquadro grafico di riserva -->
-                <p style="font-weight: bold; color: gold;">🎁 BONUS DISPONIBILE 🎁</p>
+                <p style="font-weight: bold; color: gold; margin: 0;">🎁 BONUS DISPONIBILE 🎁</p>
             </div>
         </div>
-        <!-- ======================================================= -->
 
         <div class="slot-machine">
             <div class="reels">
-                <div class="reel" id="reel1">💎</div>
-                <div class="reel" id="reel2">💎</div>
-                <div class="reel" id="reel3">💎</div>
+                <div class="reel" id="reel1">🍒</div>
+                <div class="reel" id="reel2">🍋</div>
+                <div class="reel" id="reel3">🍇</div>
             </div>
             <button class="btn btn-spin" id="spinBtn" onclick="spin()">Gira ($10)</button>
         </div>
 
         <div id="message">Benvenuto! Clicca su Gira!</div>
-
-        <div class="referral-box">
-            <p>Vuoi guadagnare con un sito web?</p>
-            <a class="ref-link" href="https://adsterra.com" rel="nofollow" target="_blank">🚀 Iscriviti gratis su Adsterra</a>
-        </div>
     </div>
 
     <script>
@@ -136,13 +112,13 @@
             document.getElementById('spinBtn').disabled = true;
             updateMessage("I rulli girano...");
 
-            // Probabilità di vincita impostata solo al 3% per far finire subito i soldi
+            // Controllo vincita impostato a una probabilità del 3%
             let chance = Math.floor(Math.random() * 100) + 1;
             let isWinningTurn = (chance <= 3); 
 
             let count = 0;
             let interval = setInterval(() => {
-                if (count < 12) {
+                if (count < 10) {
                     document.getElementById('reel1').innerText = symbols[Math.floor(Math.random() * symbols.length)];
                     document.getElementById('reel2').innerText = symbols[Math.floor(Math.random() * symbols.length)];
                     document.getElementById('reel3').innerText = symbols[Math.floor(Math.random() * symbols.length)];
@@ -163,7 +139,7 @@
                         }
                         document.getElementById('reel1').innerText = r1;
                         document.getElementById('reel2').innerText = r2;
-                        document.getElementById('reel3').innerText = r3;
+                        document.getElementById('reel3').innerText = r2;
                     }
 
                     document.getElementById('spinBtn').disabled = false;
@@ -171,7 +147,7 @@
                     gainXP(15);
                 }
                 count++;
-            }, 80);
+            }, 90);
         }
 
         function checkWin() {
@@ -180,12 +156,8 @@
             const r3 = document.getElementById('reel3').innerText;
 
             if (r1 === r2 && r2 === r3) {
-                let win = 40;
-                credits += win;
-                updateMessage("🎉 TRIS! Hai vinto $" + win + "! 🎉");
-            } else if (r1 === r2 || r2 === r3 || r1 === r3) {
-                credits += 2;
-                updateMessage("😅 COPPIA! Rimani in gara (+ $2)");
+                credits += 40;
+                updateMessage("🎉 TRIS! Hai vinto $40! 🎉");
             } else {
                 updateMessage("Ritenta! La fortuna gira.");
             }
@@ -195,3 +167,39 @@
         }
 
         function gainXP(amount) {
+            xp += amount;
+            if (xp >= xpPerLevel) {
+                xp = xp - xpPerLevel;
+                level++;
+                document.getElementById('level').innerText = level;
+                credits += 5; 
+            }
+            document.getElementById('xpBar').style.width = (xp / xpPerLevel * 100) + '%';
+            document.getElementById('credits').innerText = credits;
+            checkCreditsStatus();
+        }
+
+        function checkCreditsStatus() {
+            if (credits < 10) {
+                document.getElementById('adOverlay').style.display = 'flex';
+            } else {
+                document.getElementById('adOverlay').style.display = 'none';
+            }
+        }
+
+        function claimCredits() {
+            // Esegue l'accredito quando l'utente clicca sul link sicuro dello sponsor
+            setTimeout(() => {
+                credits += 60;
+                document.getElementById('credits').innerText = credits;
+                checkCreditsStatus();
+                updateMessage("✅ +60 Monete accreditate!");
+            }, 1000);
+        }
+
+        function updateMessage(text) {
+            document.getElementById('message').innerText = text;
+        }
+    </script>
+</body>
+</html>
