@@ -36,9 +36,15 @@
             box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
         }
         
-        .btn { background: #e74c3c; color: white; border: none; padding: 16px; font-size: 22px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; text-transform: uppercase; box-shadow: 0 5px #c0392b; }
+        .btn { background: #e74c3c; color: white; border: none; padding: 16px; font-size: 22px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; text-transform: uppercase; box-shadow: 0 5px #c0392b; margin-bottom: 12px; }
         .btn:active { transform: translateY(2px); box-shadow: 0 2px #c0392b; }
         .btn:disabled { background: #555 !important; box-shadow: none !important; cursor: not-allowed; }
+        
+        /* Stile del Bottone Pubblicità con Ricompensa */
+        .btn-reward { background: #f1c40f; color: #111; border: none; padding: 12px; font-size: 18px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; text-transform: uppercase; box-shadow: 0 5px #f39c12; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-reward:active { transform: translateY(2px); box-shadow: 0 2px #f39c12; }
+        .btn-reward:disabled { background: #555 !important; color: #888 !important; box-shadow: none !important; cursor: not-allowed; }
+
         #message { font-size: 18px; margin-top: 20px; color: #f1c40f; font-weight: bold; min-height: 26px; }
         
         /* Spazio contenitore per il banner pubblicitario verticale */
@@ -64,9 +70,12 @@
 
         <button class="btn" id="spinBtn" onclick="spin()">GIRA ($5)</button>
         
+        <!-- Pulsante per ricevere monete guardando la pubblicità -->
+        <button class="btn-reward" id="rewardBtn" onclick="guardaAdPerMonete()">📺 Bonus Gratis (+$100)</button>
+        
         <div id="message">Fai girare i rulli!</div>
 
-        <!-- CODICE ADSTERRA DEL BANNER 160x300 AGGIORNATO SOTTO IL GIOCO -->
+        <!-- BANNER PUBBLICITARIO -->
         <div class="ad-banner">
             <script type="text/javascript">
               atOptions = {
@@ -77,24 +86,34 @@
                 'params' : {}
               };
             </script>
-            <script src="https://bauval.org"></script>
+            <script src="https://highratecpm.com"></script>
         </div>
     </div>
 
     <script>
-        // Set di simboli: Cuori, Fiori, Diamanti, Faccine
         const simboli = ['💖', '🌸', '💎', '😎', '😜', '🔥'];
-        let monete = 200;
         const COSTO_GIRO = 5;
+
+        // Recupera in automatico le monete salvate nel browser per non perdere i progressi
+        let monete = localStorage.getItem('slot_monete') ? parseInt(localStorage.getItem('slot_monete')) : 200;
+        document.getElementById('credits').innerText = monete;
+
+        // 🛑 METTI IL TUO LINK DI ADSTERRA DOPO LO SLASH (Lascia il codice dentro le virgolette)
+        const ADSTERRA_DIRECT_LINK = "https://"; 
+
+        function aggiornaMonete(nuovoValore) {
+            monete = nuovoValore;
+            document.getElementById('credits').innerText = monete;
+            localStorage.setItem('slot_monete', monete);
+        }
 
         function spin() {
             if (monete < COSTO_GIRO) {
-                document.getElementById('message').innerText = "❌ Monete finite! Ricarica la pagina.";
+                document.getElementById('message').innerText = "❌ Monete finite! Clicca su 'BONUS GRATIS' sotto.";
                 return;
             }
 
-            monete -= COSTO_GIRO;
-            document.getElementById('credits').innerText = monete;
+            aggiornaMonete(monete - COSTO_GIRO);
             document.getElementById('spinBtn').disabled = true;
             document.getElementById('message').innerText = "I rulli girano...";
 
@@ -125,21 +144,48 @@
                     if (g[2] === g[4] && g[4] === g[6]) { vincitaTotale += 50; haVinto = true; }
 
                     if (haVinto) {
-                        monete += vincitaTotale;
+                        aggiornaMonete(monete + vincitaTotale);
                         document.getElementById('message').innerText = "🎉 HAI VINTO +$" + vincitaTotale + "! 🎉";
                     } else {
                         document.getElementById('message').innerText = "Ritenta! La fortuna gira.";
                     }
 
-                    document.getElementById('credits').innerText = monete;
                     document.getElementById('spinBtn').disabled = false;
+                    
+                    if (monete < COSTO_GIRO) {
+                        document.getElementById('message').innerText = "❌ Monete finite! Usa il tasto BONUS GRATIS.";
+                    }
                 }
             }, 100);
         }
+
+        function guardaAdPerMonete() {
+            const btnReward = document.getElementById('rewardBtn');
+            
+            if (ADSTERRA_DIRECT_LINK === "https://") {
+                alert("Completa prima la configurazione inserendo il tuo link alla riga 84!");
+                return;
+            }
+
+            // Apre il link pubblicitario
+            window.open(ADSTERRA_DIRECT_LINK, '_blank');
+            
+            btnReward.disabled = true;
+            btnReward.innerText = "⏳ Caricamento premio...";
+            
+            // Consegna il premio dopo 3 secondi di attesa
+            setTimeout(function() {
+                aggiornaMonete(monete + 100);
+                document.getElementById('message').innerText = "🎉 Ricarica completata! +$100 monete.";
+                
+                btnReward.disabled = false;
+                btnReward.innerText = "📺 Bonus Gratis (+$100)";
+            }, 3000);
+        }
     </script>
 
-    <!-- CODICE SOCIAL BAR DI ADSTERRA INSERITO IN FONDO ALLA PAGINA -->
-    <script data-cfasync="false" src="https://bauval.org"></script>
+    <!-- INSERIMENTO SOCIAL BAR DI ADSTERRA CORRETTO -->
+    <script data-cfasync="false" src="https://highratecpm.com"></script>
 
 </body>
 </html>
