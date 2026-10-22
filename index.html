@@ -1,83 +1,93 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slot Machine 3x3</title>
-    <style>
-        body {
-            background-color: #0e0e10;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        .slot-container {
-            margin: 20px auto;
-            max-width: 300px;
-            background: #18181b;
-            padding: 15px;
-            border-radius: 10px;
-            border: 3px solid #ffcc00;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .cell {
-            background: #27272a;
-            font-size: 2rem;
-            padding: 20px 0;
-            border-radius: 5px;
-        }
-        button {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-        #btn-gira { background-color: #ef4444; }
-        #btn-bonus { background-color: #eab308; color: black; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        #status { margin-top: 10px; color: #eab308; }
-    </style>
+<!DOCTYPE html> 
+<html lang="it"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Slot Machine 3x3 - CrazyGames Edition</title> 
+    <style> 
+        body { 
+            background-color: #0e0e10; 
+            color: white; 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            padding: 20px; 
+        } 
+        .slot-container { 
+            margin: 20px auto; 
+            max-width: 300px; 
+            background: #18181b; 
+            padding: 15px; 
+            border-radius: 10px; 
+            border: 3px solid #ffcc00; 
+        } 
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 10px; 
+            margin-bottom: 20px; 
+        } 
+        .cell { 
+            background: #27272a; 
+            font-size: 2rem; 
+            padding: 20px 0; 
+            border-radius: 5px; 
+        } 
+        button { 
+            width: 100%; 
+            padding: 15px; 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            margin-bottom: 10px; 
+        } 
+        #btn-gira { 
+            background-color: #ef4444; 
+        } 
+        #btn-bonus { 
+            background-color: #eab308; 
+            color: black; 
+        } 
+        button:disabled { 
+            opacity: 0.5; 
+            cursor: not-allowed; 
+        } 
+        #status { 
+            margin-top: 10px; 
+            color: #eab308; 
+        } 
+    </style> 
+    <!-- 1. CARICAMENTO SDK CRAZYGAMES V3 --> 
+    <script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script> 
+</head> 
+<body> 
 
-    <!-- 1. CARICAMENTO SDK CRAZYGAMES V3 -->
-    <script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
-</head>
-<body>
-
-    <h1>Slot Machine 3x3</h1>
-    <h2 id="saldo-display">Caricamento saldo...</h2>
-
-    <div class="slot-container">
-        <!-- Griglia 3x3 -->
-        <div class="grid" id="slot-grid">
-            <div class="cell">🔥</div><div class="cell">🔥</div><div class="cell">🔥</div>
-            <div class="cell">🔥</div><div class="cell">🔥</div><div class="cell">🔥</div>
-            <div class="cell">🔥</div><div class="cell">🔥</div><div class="cell">🔥</div>
-        </div>
-
-        <!-- Pulsanti di Gioco -->
-        <button id="btn-gira" onclick="giraSlot()" disabled>GIRA ($5)</button>
-        <button id="btn-bonus" onclick="riceviBonus()" disabled>📺 BONUS GRATIS (+$100)</button>
+    <h1>Slot Machine 3x3</h1> 
+    <h2 id="saldo-display">Caricamento saldo...</h2> 
+    
+    <div class="slot-container"> 
+        <!-- Griglia 3x3 --> 
+        <div class="grid" id="slot-grid"> 
+            <div class="cell">🔥</div><div class="cell">🔥</div><div class="cell">🔥</div> 
+            <div class="cell">🔥</div><div class="cell">🔥</div><div class="cell">🔥</div> 
+            <div class="cell">🔥</div><div class="cell">🔥</div><div class="cell">🔥</div> 
+        </div> 
         
-        <div id="status">Inizializzazione SDK in corso...</div>
-    </div>
+        <!-- Pulsanti di Gioco --> 
+        <button id="btn-gira" onclick="giraSlot()" disabled>GIRA ($5)</button> 
+        <button id="btn-bonus" onclick="riceviBonus()" disabled>📺 BONUS GRATIS (+$100)</button> 
+        
+        <div id="status">Inizializzazione SDK in corso...</div> 
+    </div> 
 
-    <!-- 2. LOGICA DI GIOCO E INTEGRAZIONE SDK -->
-    <script>
+    <!-- 2. LOGICA DI GIOCO E INTEGRAZIONE SDK --> 
+    <script> 
         // Variabili di stato del gioco
-        let saldo = 100; // Valore iniziale standard
-        const simboli = ["😜", "🔥", "😎", "💎", "💖"];
-        
+        let saldo = 100; 
+        const simboli = ["😜", "🔥", "😎", "💎", "💖"]; 
+
         // Elementi del DOM
         const saldoDisplay = document.getElementById("saldo-display");
         const btnGira = document.getElementById("btn-gira");
@@ -90,35 +100,35 @@
             try {
                 statusTxt.innerText = "Connessione a CrazyGames...";
                 
-                // Inizializza l'SDK ufficiale v3
+                // Inizializza l'SDK ufficiale v3 (Obbligatorio)
                 await window.CrazyGames.SDK.init();
                 console.log("CrazyGames SDK inizializzato con successo.");
-                
+
                 // Comunica alla piattaforma che il caricamento è finito e il gameplay ha inizio
                 window.CrazyGames.SDK.game.gameplayStart();
-                
+
                 // Recupera i dati salvati sul cloud di CrazyGames
                 recuperaSalvataggi();
-                
-                // Abilita l'interfaccia di gioco
+
+                // Abilita i controlli utente
                 btnGira.disabled = false;
                 btnBonus.disabled = false;
                 statusTxt.innerText = "Buona fortuna! La fortuna gira.";
             } catch (error) {
                 console.error("Errore nell'inizializzazione dell'SDK:", error);
                 statusTxt.innerText = "Errore SDK. Esecuzione in modalità locale.";
-                // Abilita i pulsanti anche in caso di fallback locale (es. test sul proprio computer)
+                
+                // Fallback locale in caso di test su file locale o localhost
                 aggiornaGraficaSaldo();
                 btnGira.disabled = false;
                 btnBonus.disabled = false;
             }
         }
 
-        // Funzione per caricare il saldo dal Data Module di CrazyGames
+        // Recupera il saldo dal Cloud di CrazyGames usando il modulo Data
         function recuperaSalvataggi() {
             try {
                 if (window.CrazyGames?.SDK?.data) {
-                    // Tenta di leggere la chiave dai server di CrazyGames
                     const saldoSalvato = window.CrazyGames.SDK.data.getItem("slot_user_saldo");
                     if (saldoSalvato !== null) {
                         saldo = parseInt(saldoSalvato, 10);
@@ -128,17 +138,16 @@
                     }
                 }
             } catch (e) {
-                console.warn("Impossibile accedere al modulo dati dell'SDK (normale in localhost):", e);
+                console.warn("Impossibile accedere al modulo dati dell'SDK (normale durante i test locali):", e);
             }
             aggiornaGraficaSaldo();
         }
 
-        // Funzione per salvare il saldo corrente sul cloud di CrazyGames
+        // Salva i progressi nel Cloud di CrazyGames
         function salvaProgressi() {
             aggiornaGraficaSaldo();
             try {
                 if (window.CrazyGames?.SDK?.data) {
-                    // Salva in modo persistente sul cloud dell'utente
                     window.CrazyGames.SDK.data.setItem("slot_user_saldo", saldo.toString());
                     console.log("Progressi salvati su CrazyGames:", saldo);
                 }
@@ -147,7 +156,9 @@
             }
         }
 
-        // Aggiorna il testo del saldo a schermo
+        // Aggiorna l'interfaccia del saldo
+        function更新graficaSaldo() { // (corretto in aggiornaGraficaSaldo nella chiamata reale)
+        }
         function aggiornaGraficaSaldo() {
             saldoDisplay.innerText = "$" + saldo;
         }
@@ -159,13 +170,10 @@
                 return;
             }
 
-            // Sottrae il costo della giocata e salva subito
             saldo -= 5;
             salvaProgressi();
-
             statusTxt.innerText = "I rulli girano...";
-            
-            // Genera i risultati della slot randomicamente
+
             let risultati = [];
             gridCells.forEach(cell => {
                 const simboloCasuale = simboli[Math.floor(Math.random() * simboli.length)];
@@ -173,27 +181,63 @@
                 risultati.push(simboloCasuale);
             });
 
-            // Logica di vincita basilare (esempio: controlla se la prima riga ha 3 simboli uguali)
-            if (risultati[0] === risultati[1] && Array.from(new Set(risultati)).length <= 3) {
-                // Calcolo semplificato di una vincita random per aggiungere divertimento
-                const vincita = 25;
+            // LOGICA DI VINCITA CORRETTA: Controlla se i primi 3 elementi (prima riga) sono uguali
+            if (risultati[0] === risultati[1] && risultati[1] === risultati[2]) {
+                const vincita = 50;
                 saldo += vincita;
-                statusTxt.innerText = "Hai vinto $" + vincita + "! 🎉";
+                statusTxt.innerText = "TRIPLO SIMBOLO! Hai vinto $" + vincita + "! 🎉";
                 salvaProgressi();
             } else {
                 statusTxt.innerText = "Ritenta! La fortuna gira.";
             }
         }
 
-        // Funzione associata al pulsante BONUS GRATIS
+        // Funzione associata al pulsante BONUS GRATIS con Video Pubblicitario Premiato (Rewarded Ad)
         function riceviBonus() {
-            saldo += 100;
-            statusTxt.innerText = "Bonus di $100 accreditato con successo! 🎁";
-            salvaProgressi();
+            // Se l'SDK è attivo su CrazyGames, richiede un video ad
+            if (window.CrazyGames?.SDK?.ad) {
+                // Disabilita temporaneamente i pulsanti per prevenire input multipli
+                btnGira.disabled = true;
+                btnBonus.disabled = true;
+                statusTxt.innerText = "Caricamento dell'annuncio...";
+
+                window.CrazyGames.SDK.ad.requestAd("rewarded", {
+                    adStarted: () => {
+                        console.log("Annuncio video iniziato.");
+                        statusTxt.innerText = "Guarda tutto l'annuncio per riscuotere il tuo bonus.";
+                        // Regola CrazyGames: Qui dovresti silenziare l'audio del gioco se presente
+                    },
+                    adFinished: () => {
+                        console.log("Annuncio video completato.");
+                        // L'utente ottiene la ricompensa SOLO alla fine del video
+                        saldo += 100;
+                        statusTxt.innerText = "Bonus di $100 accreditato! 🎁";
+                        salvaProgressi();
+
+                        // Riabilita i pulsanti
+                        btnGira.disabled = false;
+                        btnBonus.disabled = false;
+                    },
+                    adError: (error) => {
+                        console.error("Errore nell'annuncio:", error);
+                        statusTxt.innerText = "Annuncio non disponibile. Riprova più tardi.";
+                        
+                        // Sblocca i pulsanti anche in caso di errore per non congelare il gioco
+                        btnGira.disabled = false;
+                        btnBonus.disabled = false;
+                    }
+                });
+            } else {
+                // Fallback di simulazione locale (funziona quando testi sul tuo PC)
+                saldo += 100;
+                statusTxt.innerText = "[Modalità Locale] Bonus simulato di $100 accreditato! 🎁";
+                salvaProgressi();
+            }
         }
 
-        // Avvia l'inizializzazione dell'app al caricamento della pagina
+        // Avvia l'inizializzazione al caricamento della pagina
         window.onload = inizializzaGioco;
     </script>
-</body>
+</body> 
 </html>
+
