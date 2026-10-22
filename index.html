@@ -27,6 +27,22 @@
         .xp-bar-container { background: #333; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px; }
         .xp-bar { background: #f1c40f; height: 100%; width: 0%; transition: width 0.3s; }
         
+        /* Stile del Box Banner Pubblicitario */
+        .adsterra-banner-container { 
+            margin: 0 auto 20px auto; 
+            min-height: 250px; 
+            max-width: 300px; 
+            background: #222227; 
+            border-radius: 12px; 
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 12px;
+            overflow: hidden;
+        }
+
         /* Stile per il box del Referral Link */
         .referral-box { margin-top: 25px; padding: 15px; background: #1e1e24; border-radius: 12px; border: 1px dashed #3498db; }
         .referral-box p { margin: 0 0 10px 0; font-size: 14px; color: #bbb; }
@@ -47,6 +63,15 @@
             </div>
         </div>
 
+        <!-- ======================================================= -->
+        <!-- AREA CONTENITORE BANNER ADSTERRA                        -->
+        <!-- ======================================================= -->
+        <div class="adsterra-banner-container">
+            <!-- ⚠️ IMPORTANTE: Sostituisci questo commento interamente incollando lo script dello script/iframe del banner ottenuto dalla dashboard Adsterra (es. formato Native o Banner 300x250) -->
+            <div>SPAZIO PUBBLICITARIO<br>(Incolla qui il codice del banner Adsterra)</div>
+        </div>
+        <!-- ======================================================= -->
+
         <div class="slot-machine">
             <div class="reels">
                 <div class="reel" id="reel1">💎</div>
@@ -59,7 +84,7 @@
 
         <div id="message">Benvenuto! Clicca su Gira!</div>
 
-        <!-- Box Referral aggiunto in fondo alla card -->
+        <!-- Box Referral in fondo alla card -->
         <div class="referral-box">
             <p>Vuoi guadagnare anche tu con la pubblicità?</p>
             <a class="ref-link" href="https://adsterra.com" rel="nofollow" target="_blank"> 🚀 Iscriviti gratis su Adsterra</a>
@@ -148,7 +173,6 @@
             updateMessage("🎬 Caricamento pubblicità...");
             document.getElementById('adBtn').disabled = true;
             
-            // Sostituito il link generico con il tuo referral link reale
             window.open("https://adsterra.com", "_blank");
 
             setTimeout(() => {
