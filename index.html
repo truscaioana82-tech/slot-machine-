@@ -98,7 +98,7 @@
         let monete = localStorage.getItem('slot_monete') ? parseInt(localStorage.getItem('slot_monete')) : 200;
         document.getElementById('credits').innerText = monete;
 
-        // Il tuo Smartlink di AdSterra inserito correttamente
+        // Il tuo Smartlink di AdSterra inserito COMPLETO
         const ADSTERRA_DIRECT_LINK = "https://araplhn.org"; 
 
         function aggiornaMonete(nuovoValore) {
@@ -164,6 +164,12 @@
         function guardaAdPerMonete() {
             const btnReward = document.getElementById('rewardBtn');
             
+            // Verifica di sicurezza per evitare stringhe interrotte
+            if (ADSTERRA_DIRECT_LINK.length < 25) {
+                alert("Completa prima la configurazione inserendo il tuo link alla riga 84!");
+                return;
+            }
+
             // Apre il link pubblicitario personale di AdSterra
             window.open(ADSTERRA_DIRECT_LINK, '_blank');
             
