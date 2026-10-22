@@ -62,7 +62,7 @@
         <div class="ad-overlay" id="adOverlay">
             <h2> 💸 CREDITI ESAURITI! 💸</h2>
             <p>Hai finito le monete. Clicca qui sotto per aprire la pubblicità sponsorizzata e ottenere subito +60 crediti gratis!</p>
-            <a href="https://adsterra.com" target="_blank" class="btn-ad-trigger" id="adBtn" onclick="claimCredits()">📺 Guarda Pubblicità</a>
+            <a href="https://asiafilm.org" target="_blank" class="btn-ad-trigger" id="adBtn" onclick="claimCredits()">📺 Guarda Pubblicità</a>
         </div>
 
         <h1>🎰 VEGAS GOLD SLOT 🎰</h1>
@@ -100,6 +100,17 @@
         let level = 1;
         const xpPerLevel = 100;
 
+        // Gestione corretta dell'avvio per forzare i 100 crediti iniziali
+        window.onload = function() {
+            credits = 100;
+            level = 1;
+            xp = 0;
+            document.getElementById('credits').innerText = credits;
+            document.getElementById('level').innerText = level;
+            document.getElementById('xpBar').style.width = '0%';
+            checkCreditsStatus();
+        };
+
         function spin() {
             if (credits < 10) {
                 checkCreditsStatus();
@@ -111,7 +122,6 @@
             document.getElementById('spinBtn').disabled = true;
             updateMessage("I rulli girano...");
 
-            // Probabilità di vincita reale bloccata al 3% per far perdere velocemente l'utente
             let chance = Math.floor(Math.random() * 100) + 1;
             let isWinningTurn = (chance <= 3); 
 
@@ -130,7 +140,6 @@
                         document.getElementById('reel2').innerText = winningSymbol;
                         document.getElementById('reel3').innerText = winningSymbol;
                     } else {
-                        // Generazione casuale forzata di perdita matematica (Risolto l'errore di crash)
                         let r1 = symbols[Math.floor(Math.random() * symbols.length)];
                         let r2 = symbols[Math.floor(Math.random() * symbols.length)];
                         let r3 = symbols[Math.floor(Math.random() * symbols.length)];
@@ -189,17 +198,11 @@
         }
 
         function claimCredits() {
+            let urlPubblicita = "https://asiafilm.org";
+            window.open(urlPubblicita, "_blank");
+
             setTimeout(() => {
                 credits += 60;
                 document.getElementById('credits').innerText = credits;
                 checkCreditsStatus();
                 updateMessage("✅ +60 Monete accreditate con successo!");
-            }, 1000);
-        }
-
-        function updateMessage(text) {
-            document.getElementById('message').innerText = text;
-        }
-    </script>
-</body>
-</html>
