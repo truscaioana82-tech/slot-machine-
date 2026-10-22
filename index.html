@@ -40,6 +40,9 @@
         .btn:active { transform: translateY(2px); box-shadow: 0 2px #c0392b; }
         .btn:disabled { background: #555 !important; box-shadow: none !important; cursor: not-allowed; }
         #message { font-size: 18px; margin-top: 20px; color: #f1c40f; font-weight: bold; min-height: 26px; }
+        
+        /* Spazio contenitore per il banner pubblicitario */
+        .ad-banner { margin-top: 20px; min-height: 60px; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
@@ -62,6 +65,20 @@
         <button class="btn" id="spinBtn" onclick="spin()">GIRA ($5)</button>
         
         <div id="message">Fai girare i rulli!</div>
+
+        <!-- BANNER 468x60 DI ADSTERRA INSERITO QUI -->
+        <div class="ad-banner">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '245bd3ddfef1518b3af92d30a2b912f3',
+                    'format' : 'iframe',
+                    'height' : 60,
+                    'width' : 468,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//://highperformanceformat.com"></script>
+        </div>
     </div>
 
     <script>
@@ -129,5 +146,9 @@
             }, 100);
         }
     </script>
+
+    <!-- CODICE SOCIALBAR DI ADSTERRA INSERITO IN FONDO PRIMA DELLA CHIUSURA DEL CORPO -->
+    <script data-cfasync="false" src="https://bauval.org"></script>
+
 </body>
 </html>
