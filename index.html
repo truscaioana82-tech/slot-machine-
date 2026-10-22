@@ -98,7 +98,7 @@
         let monete = localStorage.getItem('slot_monete') ? parseInt(localStorage.getItem('slot_monete')) : 200;
         document.getElementById('credits').innerText = monete;
 
-        // 🛑 METTI IL TUO LINK DI ADSTERRA DOPO LO SLASH (Lascia il codice dentro le virgolette)
+        // 🛑 INCOLLA IL TUO LINK DI ADSTERRA SUBITO DOPO LO SLASH (lascia le virgolette alla fine):
         const ADSTERRA_DIRECT_LINK = "https://"; 
 
         function aggiornaMonete(nuovoValore) {
@@ -136,10 +136,12 @@
                     let vincitaTotale = 0;
                     let haVinto = false;
 
+                    // Orizzontali
                     if (g[0] === g[1] && g[1] === g[2]) { vincitaTotale += 30; haVinto = true; }
                     if (g[3] === g[4] && g[4] === g[5]) { vincitaTotale += 30; haVinto = true; }
                     if (g[6] === g[7] && g[7] === g[8]) { vincitaTotale += 30; haVinto = true; }
 
+                    // Diagonali
                     if (g[0] === g[4] && g[4] === g[8]) { vincitaTotale += 50; haVinto = true; }
                     if (g[2] === g[4] && g[4] === g[6]) { vincitaTotale += 50; haVinto = true; }
 
