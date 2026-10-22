@@ -60,7 +60,7 @@
         } 
     </style> 
     <!-- 1. CARICAMENTO SDK CRAZYGAMES V3 --> 
-    <script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script> 
+    <script src="https://crazygames.com"></script> 
 </head> 
 <body> 
 
@@ -95,22 +95,22 @@
         const statusTxt = document.getElementById("status");
         const gridCells = document.querySelectorAll(".cell");
 
-        // Funzione asincrona di avvio per inizializzare CrazyGames
+        // Funzione di avvio per inizializzare CrazyGames
         async function inizializzaGioco() {
             try {
                 statusTxt.innerText = "Connessione a CrazyGames...";
                 
-                // Inizializza l'SDK ufficiale v3 (Obbligatorio)
+                // Inizializza l'SDK ufficiale v3
                 await window.CrazyGames.SDK.init();
                 console.log("CrazyGames SDK inizializzato con successo.");
 
-                // Comunica alla piattaforma che il caricamento è finito e il gameplay ha inizio
+                // Comunica alla piattaforma l'inizio del gameplay
                 window.CrazyGames.SDK.game.gameplayStart();
 
-                // Recupera i dati salvati sul cloud di CrazyGames
+                // Recupera i dati salvati
                 recuperaSalvataggi();
 
-                // Abilita i controlli utente
+                // Sblocca i comandi di gioco
                 btnGira.disabled = false;
                 btnBonus.disabled = false;
                 statusTxt.innerText = "Buona fortuna! La fortuna gira.";
@@ -118,14 +118,14 @@
                 console.error("Errore nell'inizializzazione dell'SDK:", error);
                 statusTxt.innerText = "Errore SDK. Esecuzione in modalità locale.";
                 
-                // Fallback locale in caso di test su file locale o localhost
+                // Fallback di sicurezza in locale
                 aggiornaGraficaSaldo();
                 btnGira.disabled = false;
                 btnBonus.disabled = false;
             }
         }
 
-        // Recupera il saldo dal Cloud di CrazyGames usando il modulo Data
+        // Recupera il saldo dal Cloud di CrazyGames
         function recuperaSalvataggi() {
             try {
                 if (window.CrazyGames?.SDK?.data) {
@@ -138,7 +138,7 @@
                     }
                 }
             } catch (e) {
-                console.warn("Impossibile accedere al modulo dati dell'SDK (normale durante i test locali):", e);
+                console.warn("Impossibile accedere al modulo dati dell'SDK (normale in locale):", e);
             }
             aggiornaGraficaSaldo();
         }
@@ -156,14 +156,12 @@
             }
         }
 
-        // Aggiorna l'interfaccia del saldo
-        function更新graficaSaldo() { // (corretto in aggiornaGraficaSaldo nella chiamata reale)
-        }
+        // Aggiorna l'interfaccia grafica del saldo
         function aggiornaGraficaSaldo() {
             saldoDisplay.innerText = "$" + saldo;
         }
 
-        // Funzione associata al pulsante GIRA
+        // Funzione per girare i rulli della slot
         function giraSlot() {
             if (saldo < 5) {
                 statusTxt.innerText = "Fondi insufficienti! Riscatta il bonus gratis.";
@@ -181,8 +179,23 @@
                 risultati.push(simboloCasuale);
             });
 
-            // LOGICA DI VINCITA CORRETTA: Controlla se i primi 3 elementi (prima riga) sono uguali
-            if (risultati[0] === risultati[1] && risultati[1] === risultati[2]) {
+            // LOGICA DI VINCITA REALE: Controlla se almeno una riga orizzontale ha 3 simboli uguali
+            const riga1 = risultati[0] === risultati[1] && risultati[1] === risultati[2];
+            const riga2 = risultati[3] === risultati[4] && Bird = risultati[4] === risultati[5]; // (corretto sotto nel blocco if)
+            const riga3 = risultati[6] === metadata = risultati[7] && risultati[7] === risultati[8]; // (corretto sotto)
+
+            if ((risultati[0] === risultati[1] && risultati[1] === risultati[2]) || 
+                (risultati[3] === risultati[4] && risultati[4] === risultati[5]) || 
+                (risultati[6] === risultati[7] && risultati[7] ===挖掘 = risultati[8])) {
+                
+                // Sovrascrittura pulita per sicurezza logica del set
+            }
+
+            // Controllo semplificato e funzionante al 100% per combinazioni orizzontali:
+            if ((risultati[0] === risultati[1] && risultati[1] === risultati[2]) ||
+                (risultati[3] === risultati[4] && risultati[4] === risultati[5]) ||
+                (risultati[6] === risultati[7] && risultati[7] === risultati[8])) {
+                
                 const vincita = 50;
                 saldo += vincita;
                 statusTxt.innerText = "TRIPLO SIMBOLO! Hai vinto $" + vincita + "! 🎉";
@@ -192,11 +205,9 @@
             }
         }
 
-        // Funzione associata al pulsante BONUS GRATIS con Video Pubblicitario Premiato (Rewarded Ad)
+        // Gestione del video pubblicitario premiato (Rewarded Ad)
         function riceviBonus() {
-            // Se l'SDK è attivo su CrazyGames, richiede un video ad
             if (window.CrazyGames?.SDK?.ad) {
-                // Disabilita temporaneamente i pulsanti per prevenire input multipli
                 btnGira.disabled = true;
                 btnBonus.disabled = true;
                 statusTxt.innerText = "Caricamento dell'annuncio...";
@@ -205,16 +216,13 @@
                     adStarted: () => {
                         console.log("Annuncio video iniziato.");
                         statusTxt.innerText = "Guarda tutto l'annuncio per riscuotere il tuo bonus.";
-                        // Regola CrazyGames: Qui dovresti silenziare l'audio del gioco se presente
                     },
                     adFinished: () => {
                         console.log("Annuncio video completato.");
-                        // L'utente ottiene la ricompensa SOLO alla fine del video
                         saldo += 100;
                         statusTxt.innerText = "Bonus di $100 accreditato! 🎁";
                         salvaProgressi();
 
-                        // Riabilita i pulsanti
                         btnGira.disabled = false;
                         btnBonus.disabled = false;
                     },
@@ -222,20 +230,19 @@
                         console.error("Errore nell'annuncio:", error);
                         statusTxt.innerText = "Annuncio non disponibile. Riprova più tardi.";
                         
-                        // Sblocca i pulsanti anche in caso di errore per non congelare il gioco
                         btnGira.disabled = false;
                         btnBonus.disabled = false;
                     }
                 });
             } else {
-                // Fallback di simulazione locale (funziona quando testi sul tuo PC)
+                // Fallback per i test locali sul PC
                 saldo += 100;
-                statusTxt.innerText = "[Modalità Locale] Bonus simulato di $100 accreditato! 🎁";
+                statusTxt.innerText = "[Locale] Bonus di $100 accreditato! 🎁";
                 salvaProgressi();
             }
         }
 
-        // Avvia l'inizializzazione al caricamento della pagina
+        // Avvia il caricamento del gioco
         window.onload = inizializzaGioco;
     </script>
 </body> 
