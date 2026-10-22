@@ -27,21 +27,21 @@
         .xp-bar-container { background: #333; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px; }
         .xp-bar { background: #f1c40f; height: 100%; width: 0%; transition: width 0.3s; }
         
-        /* Stile del Box Banner Pubblicitario */
+        /* Stile del Box Banner Pubblicitario Fisso */
         .adsterra-banner-container { 
             margin: 0 auto 20px auto; 
-            min-height: 250px; 
-            max-width: 300px; 
+            width: 300px; 
+            height: 250px; 
             background: #222227; 
             border-radius: 12px; 
             border: 1px solid #333;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #555;
-            font-size: 12px;
             overflow: hidden;
         }
+        .adsterra-banner-container a { display: block; width: 100%; height: 100%; }
+        .adsterra-banner-container img { width: 100%; height: 100%; object-fit: cover; border: none; }
 
         /* Stile per il box del Referral Link */
         .referral-box { margin-top: 25px; padding: 15px; background: #1e1e24; border-radius: 12px; border: 1px dashed #3498db; }
@@ -64,11 +64,13 @@
         </div>
 
         <!-- ======================================================= -->
-        <!-- AREA CONTENITORE BANNER ADSTERRA                        -->
+        <!-- AREA CONTENITORE BANNER PUBBLICITARIO VISIVO             -->
         <!-- ======================================================= -->
         <div class="adsterra-banner-container">
-            <!-- ⚠️ IMPORTANTE: Sostituisci questo commento interamente incollando lo script dello script/iframe del banner ottenuto dalla dashboard Adsterra (es. formato Native o Banner 300x250) -->
-            <div>SPAZIO PUBBLICITARIO<br>(Incolla qui il codice del banner Adsterra)</div>
+            <!-- NOTA: Questo è un banner visivo statico temporaneo che punta al tuo Smartlink. Quando avrai lo script del banner da Adsterra, cancella tutto ciò che c'è dentro questo div e incolla lo script. -->
+            <a href="https://adsterra.com" target="_blank" rel="nofollow">
+                <img src="https://unsplash.com" alt="Pubblicità Slot">
+            </a>
         </div>
         <!-- ======================================================= -->
 
