@@ -100,7 +100,6 @@
         let level = 1;
         const xpPerLevel = 100;
 
-        // Reset sicuro delle variabili al caricamento della finestra
         window.onload = function() {
             credits = 100;
             level = 1;
@@ -123,7 +122,6 @@
             document.getElementById('spinBtn').disabled = true;
             document.getElementById('message').innerText = "I rulli girano...";
 
-            // Probabilità di vincita fissata al 3%
             let chance = Math.floor(Math.random() * 100) + 1;
             let isWinningTurn = (chance <= 3); 
 
@@ -191,6 +189,7 @@
             checkCreditsStatus();
         }
 
+        /* Schermata blocco */
         function checkCreditsStatus() {
             if (credits < 10) {
                 document.getElementById('adOverlay').style.display = 'flex';
@@ -202,3 +201,5 @@
         }
 
         function claimCredits() {
+            setTimeout(() => {
+                credits += 60;
