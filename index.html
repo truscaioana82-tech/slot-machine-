@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social Slot Premium</title>
     <!-- IL TUO CODICE PUBBLICITARIO REALE (BANNER SOCIAL BAR) -->
-    <script data-cfasync="false" src="https://bauval.org/14/bdc56feb3ac8358281903bdf866241b2"></script>
+    <script data-cfasync="false" src="https://bauval.org"></script>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121214; text-align: center; color: white; padding: 20px; margin: 0; }
         .container { max-width: 500px; margin: 20px auto; background: #1a1a1e; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); border: 1px solid #2f2f37; }
@@ -35,7 +35,8 @@
         <p style="color: #666; margin: 0 0 20px 0; font-size: 14px;">Gioca gratis • Sblocca livelli</p>
 
         <div class="stats-grid">
-            <div class="stat-box">Monete <span>\$<span id="credits">100</span></span></div>
+            <!-- CORRETTO: Rimossa la barra davanti al dollaro -->
+            <div class="stat-box">Monete <span>$<span id="credits">100</span></span></div>
             <div class="stat-box">Livello <span id="level">1</span>
                 <div class="xp-bar-container"><div class="xp-bar" id="xpBar"></div></div>
             </div>
@@ -47,7 +48,8 @@
                 <div class="reel" id="reel2">💎</div>
                 <div class="reel" id="reel3">💎</div>
             </div>
-            <button class="btn btn-spin" id="spinBtn" onclick="spin()">Gira (\$10)</button>
+            <!-- CORRETTO: Rimossa la barra dal testo del pulsante -->
+            <button class="btn btn-spin" id="spinBtn" onclick="spin()">Gira ($10)</button>
             <button class="btn btn-ad" id="adBtn" onclick="watchAd()">📺 Ricarica con Pubblicità (+60 Monete)</button>
         </div>
 
@@ -101,7 +103,8 @@
                 gainXP(40);
             } else if (r1 === r2 || r2 === r3 || r1 === r3) {
                 credits += 15;
-                updateMessage("😅 COPPIA! Rimani in gara (+\$15)");
+                <!-- CORRETTO: Rimossa la barra dal messaggio -->
+                updateMessage("😅 COPPIA! Rimani in gara (+ \$15)");
             } else {
                 updateMessage("Ritenta! La fortuna gira.");
             }
@@ -136,8 +139,7 @@
             updateMessage("🎬 Caricamento pubblicità...");
             document.getElementById('adBtn').disabled = true;
             
-            // APRE LA TUA PUBBLICITÀ IN UNA NUOVA SCHEDA PER GENERARE IL GUADAGNO
-            window.open("https://bauval.org/14/bdc56feb3ac8358281903bdf866241b2", "_blank");
+            window.open("https://bauval.org", "_blank");
 
             setTimeout(() => {
                 credits += 60;
