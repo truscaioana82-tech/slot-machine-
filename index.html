@@ -3,167 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vegas Gold Slot</title>
+    <title>Slot Machine 3x3</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: #1e1e24; 
-            text-align: center; 
+        body { font-family: sans-serif; background: #121214; text-align: center; color: white; padding: 20px; }
+        .container { max-width: 450px; margin: 20px auto; background: #1a1a1e; padding: 25px; border-radius: 20px; border: 1px solid #2f2f37; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { color: #f1c40f; margin-bottom: 10px; }
+        .stats { font-size: 18px; margin-bottom: 20px; }
+        #credits { color: #2ecc71; font-weight: bold; font-size: 24px; }
+        
+        /* Griglia della slot machine (3 colonne per 3 righe) */
+        .slot-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 12px; 
+            background: #08080a; 
+            padding: 15px; 
+            border-radius: 15px; 
+            border: 4px solid #f1c40f;
+            margin-bottom: 25px;
+        }
+        
+        /* Stile di ogni singola casella dei rulli */
+        .cell { 
+            background: #26262b; 
             color: white; 
-            padding: 20px; 
-            margin: 0; 
+            font-size: 42px; 
+            height: 90px; 
+            line-height: 90px; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            border: 1px solid #444; 
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
         }
-        .container { 
-            max-width: 600px; 
-            margin: 30px auto; 
-            background: #151518; 
-            padding: 30px; 
-            border-radius: 24px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7); 
-            border: 1px solid #2d2d35; 
-            position: relative; 
-        }
-        h1 { color: #f1c40f; font-size: 34px; margin-bottom: 20px; }
-        .stats-grid { background: #0b0b0d; padding: 15px; border-radius: 14px; margin-bottom: 25px; }
-        .stat-box { font-size: 18px; color: #888; }
-        #credits { color: #2ecc71; font-weight: bold; font-size: 26px; }
-        .slot-machine { background: #08080a; border: 4px solid #f1c40f; border-radius: 20px; padding: 25px; margin-bottom: 25px; }
-        .reels { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
-        .reel { background: rgba(255,255,255,0.1); color: #fff; font-size: 45px; width: 85px; height: 100px; line-height: 100px; border-radius: 14px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); }
-        .btn-spin { background: #e74c3c; color: white; border: none; padding: 16px; font-size: 22px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; text-transform: uppercase; box-shadow: 0 6px #c0392b; }
-        .btn-spin:active { transform: translateY(4px); box-shadow: 0 2px #c0392b; }
-        .btn-spin:disabled { background: #333 !important; color: #666 !important; box-shadow: none !important; cursor: not-allowed; }
-        #message { font-size: 18px; margin: 15px 0; font-weight: 600; color: #f1c40f; }
-        .ad-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 12, 0.95); z-index: 100; border-radius: 24px; flex-direction: column; align-items: center; justify-content: center; padding: 35px; box-sizing: border-box; }
-        .btn-ad-trigger { background: #2ecc71; color: white; font-size: 18px; padding: 18px; width: 85%; text-decoration: none; display: block; border-radius: 12px; font-weight: bold; text-transform: uppercase; }
+        
+        .btn { background: #e74c3c; color: white; border: none; padding: 16px; font-size: 22px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; text-transform: uppercase; box-shadow: 0 5px #c0392b; }
+        .btn:active { transform: translateY(2px); box-shadow: 0 2px #c0392b; }
+        .btn:disabled { background: #555 !important; box-shadow: none !important; cursor: not-allowed; }
+        #message { font-size: 18px; margin-top: 20px; color: #f1c40f; font-weight: bold; min-height: 26px; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Schermata crediti esauriti -->
-        <div class="ad-overlay" id="adOverlay">
-            <h2>💸 CREDITI ESAURITI! 💸</h2>
-            <p>Hai finito le monete. Clicca qui sotto per ottenere subito +100 crediti gratis!</p>
-            <a href="#" class="btn-ad-trigger" onclick="claimCredits(); return false;">Aggiungi Crediti</a>
+        <h1>🎰 VEGAS 3X3 SLOT 🎰</h1>
+        
+        <div class="stats">Monete: $<span id="credits">200</span></div>
+
+        <!-- Struttura della griglia con 9 caselle totali -->
+        <div class="slot-grid">
+            <!-- Prima riga -->
+            <div class="cell" id="c0">💖</div><div class="cell" id="c1">🌸</div><div class="cell" id="c2">💎</div>
+            <!-- Seconda riga -->
+            <div class="cell" id="c3">😎</div><div class="cell" id="c4">😜</div><div class="cell" id="c5">🔥</div>
+            <!-- Terza riga -->
+            <div class="cell" id="c6">💎</div><div class="cell" id="c7">💖</div><div class="cell" id="c8">🌸</div>
         </div>
 
-        <h1>🎰 VEGAS GOLD SLOT 🎰</h1>
-
-        <div class="stats-grid">
-            <div class="stat-box">Bilancio: $ <span id="credits">200</span></div>
-        </div>
-
-        <div class="slot-machine">
-            <div class="reels">
-                <div class="reel" id="reel1">💖</div>
-                <div class="reel" id="reel2">🌸</div>
-                <div class="reel" id="reel3">💎</div>
-                <div class="reel" id="reel4">😎</div>
-                <div class="reel" id="reel5">😜</div>
-            </div>
-            <button class="btn-spin" id="spinBtn" onclick="spin()">Gira ($5)</button>
-        </div>
-
-        <div id="message">Tenta la fortuna! Clicca su Gira!</div>
+        <button class="btn" id="spinBtn" onclick="spin()">GIRA ($5)</button>
+        
+        <div id="message">Fai girare i rulli!</div>
     </div>
 
     <script>
-        const symbols = ['💖', '🌸', '💎', '😎', '😜', '🔥'];
-        let credits = 200; 
-        const SPIN_COST = 5; 
-
-        window.onload = function() {
-            document.getElementById('credits').innerText = credits;
-            document.getElementById('spinBtn').disabled = false;
-            document.getElementById('adOverlay').style.display = 'none';
-        };
+        // Set di simboli: Cuori, Fiori, Diamanti, Faccine
+        const simboli = ['💖', '🌸', '💎', '😎', '😜', '🔥'];
+        let monete = 200;
+        const COSTO_GIRO = 5;
 
         function spin() {
-            if (credits < SPIN_COST) {
-                checkCreditsStatus();
+            if (monete < COSTO_GIRO) {
+                document.getElementById('message').innerText = "❌ Monete finite! Ricarica la pagina.";
                 return;
             }
 
-            // Sottrae i crediti e blocca il pulsante durante il giro
-            credits -= SPIN_COST;
-            document.getElementById('credits').innerText = credits;
+            // Scala il costo del giro e disattiva il pulsante per evitare bug
+            monete -= COSTO_GIRO;
+            document.getElementById('credits').innerText = monete;
             document.getElementById('spinBtn').disabled = true;
             document.getElementById('message').innerText = "I rulli girano...";
 
-            let count = 0;
-            let interval = setInterval(() => {
-                document.getElementById('reel1').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                document.getElementById('reel2').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                document.getElementById('reel3').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                document.getElementById('reel4').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                document.getElementById('reel5').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                count++;
+            let giriEffettuati = 0;
+            let timerAnimazione = setInterval(function() {
+                // Effetto rotazione casuale su tutte e 9 le celle contemporaneamente
+                for (let i = 0; i < 9; i++) {
+                    document.getElementById('c' + i).innerText = simboli[Math.floor(Math.random() * simboli.length)];
+                }
+                giriEffettuati++;
 
-                if (count >= 10) {
-                    clearInterval(interval);
-                    
-                    let r1 = symbols[Math.floor(Math.random() * symbols.length)];
-                    let r2 = symbols[Math.floor(Math.random() * symbols.length)];
-                    let r3 = symbols[Math.floor(Math.random() * symbols.length)];
-                    let r4 = symbols[Math.floor(Math.random() * symbols.length)];
-                    let r5 = symbols[Math.floor(Math.random() * symbols.length)];
-                    
-                    document.getElementById('reel1').innerText = r1;
-                    document.getElementById('reel2').innerText = r2;
-                    document.getElementById('reel3').innerText = r3;
-                    document.getElementById('reel4').innerText = r4;
-                    document.getElementById('reel5').innerText = r5;
+                // Quando l'animazione termina (dopo 1 secondo)
+                if (giriEffettuati >= 10) {
+                    clearInterval(timerAnimazione);
 
-                    const risultati = [r1, r2, r3, r4, r5];
-                    const conteggi = {};
-                    let maxCombinazione = 0;
+                    // Estrazione dei simboli finali stabili
+                    let g = [];
+                    for (let i = 0; i < 9; i++) {
+                        g[i] = simboli[Math.floor(Math.random() * simboli.length)];
+                        document.getElementById('c' + i).innerText = g[i];
+                    }
 
-                    risultati.forEach(simbolo => {
-                        conteggi[simbolo] = (conteggi[simbolo] || 0) + 1;
-                        if (conteggi[simbolo] > maxCombinazione) {
-                            maxCombinazione = conteggi[simbolo];
-                        }
-                    });
+                    // Logica di controllo delle combinazioni vincenti
+                    let vincitaTotale = 0;
+                    let haVinto = false;
 
-                    if (maxCombinazione === 5) {
-                        credits += 150;
-                        document.getElementById('message').innerText = "🎉 JACKPOT ASSOLUTO! +$150 🎉";
-                    } else if (maxCombinazione === 4) {
-                        credits += 50;
-                        document.getElementById('message').innerText = "💰 Grande Vincita! +$50 💰";
-                    } else if (maxCombinazione === 3) {
-                        credits += 15;
-                        document.getElementById('message').innerText = "✨ Tris Vincente! +$15 ✨";
-                    } else if (maxCombinazione === 2) {
-                        credits += 4; 
-                        document.getElementById('message').innerText = "👍 Coppia! Recuperi +$4";
+                    // 1. Controllo Linee Orizzontali
+                    if (g[0] === g[1] && g[1] === g[2]) { vincitaTotale += 30; haVinto = true; }
+                    if (g[3] === g[4] && g[4] === g[5]) { vincitaTotale += 30; haVinto = true; }
+                    if (g[6] === g[7] && g[7] === g[8]) { vincitaTotale += 30; haVinto = true; }
+
+                    // 2. Controllo Linee Diagonali
+                    if (g[0] === g[4] && g[4] === g[8]) { vincitaTotale += 50; haVinto = true; }
+                    if (g[2] === g[4] && g[4] === g[6]) { vincitaTotale += 50; haVinto = true; }
+
+                    // Gestione del messaggio di esito
+                    if (haVinto) {
+                        monete += vincitaTotale;
+                        document.getElementById('message').innerText = "🎉 HAI VINTO +$" + vincitaTotale + "! 🎉";
                     } else {
                         document.getElementById('message').innerText = "Ritenta! La fortuna gira.";
                     }
 
-                    document.getElementById('credits').innerText = credits;
+                    // Aggiorna il bilancio grafico delle monete e riattiva il tasto Gira
+                    document.getElementById('credits').innerText = monete;
                     document.getElementById('spinBtn').disabled = false;
-                    checkCreditsStatus();
                 }
             }, 100);
-        }
-
-        function checkCreditsStatus() {
-            if (credits < SPIN_COST) {
-                document.getElementById('adOverlay').style.display = 'flex';
-                document.getElementById('spinBtn').disabled = true;
-            } else {
-                document.getElementById('adOverlay').style.display = 'none';
-                document.getElementById('spinBtn').disabled = false;
-            }
-        }
-
-        function claimCredits() {
-            credits = 100; 
-            document.getElementById('credits').innerText = credits;
-            checkCreditsStatus();
-            document.getElementById('message').innerText = "✅ +100 Monete accreditate!";
         }
     </script>
 </body>
