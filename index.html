@@ -189,6 +189,15 @@
 
         document.getElementById('credits').innerText = monete;
 
+        function chiudiVincita() {
+            const overlay = document.getElementById('winOverlay');
+            overlay.style.display = 'none';
+            
+            // Pulisce le particelle rimaste a schermo
+            const particelleResidue = overlay.querySelectorAll('.coin-particle');
+            particelleResidue.forEach(p => p.remove());
+        }
+
         function spin() {
             if (monete < COSTO_GIRO) {
                 document.getElementById('message').innerText = "❌ Monete finite! Ricarica cliccando sotto.";
@@ -255,13 +264,3 @@
                     }
                     
                     document.getElementById('spinBtn').disabled = false;
-                }
-            }, 100);
-        }
-
-        function mostraSchermataVincita(importo) {
-            const overlay = document.getElementById('winOverlay');
-            document.getElementById('winAmountText').innerText = "+$" + importo;
-            overlay.style.display = 'flex';
-
-            const elementi = ['🪙', '💰', '🎉', '✨', '💎'];
