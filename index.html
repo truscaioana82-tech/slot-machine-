@@ -1,234 +1,223 @@
-<!DOCTYPE html> 
-<html lang="it"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Slot Machine 3x3 - CrazyGames Edition</title> 
-    <style> 
-        body { 
-            background-color: #0e0e10; 
-            color: white; 
-            font-family: Arial, sans-serif; 
-            text-align: center; 
-            padding: 20px; 
-        } 
-        .slot-container { 
-            margin: 20px auto; 
-            max-width: 300px; 
-            background: #18181b; 
-            padding: 15px; 
-            border-radius: 10px; 
-            border: 3px solid #ffcc00; 
-        } 
-        .grid { 
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Machine 3x3 Funzionante</title>
+    <style>
+        body { font-family: sans-serif; background: #121214; text-align: center; color: white; padding: 20px; margin: 0; }
+        .container { max-width: 450px; margin: 20px auto; background: #1a1a1e; padding: 25px; border-radius: 20px; border: 1px solid #2f2f37; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 1; }
+        h1 { color: #f1c40f; margin-bottom: 10px; }
+        .stats { font-size: 18px; margin-bottom: 20px; }
+        #credits { color: #2ecc71; font-weight: bold; font-size: 24px; }
+        
+        .slot-grid { 
             display: grid; 
             grid-template-columns: repeat(3, 1fr); 
-            gap: 10px; 
-            margin-bottom: 20px; 
-        } 
-        .cell { 
-            background: #27272a; 
-            font-size: 2rem; 
-            padding: 20px 0; 
-            border-radius: 5px; 
-        } 
-        button { 
-            width: 100%; 
+            gap: 12px; 
+            background: #08080a; 
             padding: 15px; 
-            font-size: 1.2rem; 
-            font-weight: bold; 
+            border-radius: 15px; 
+            border: 4px solid #f1c40f;
+            margin-bottom: 25px;
+        }
+        
+        .cell { 
+            background: #26262b; 
             color: white; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            margin-bottom: 10px; 
-        } 
-        #btn-gira { 
-            background-color: #ef4444; 
-        } 
-        #btn-bonus { 
-            background-color: #eab308; 
-            color: black; 
-        } 
-        button:disabled { 
-            opacity: 0.5; 
-            cursor: not-allowed; 
-        } 
-        #status { 
-            margin-top: 10px; 
-            color: #eab308; 
-        } 
-    </style> 
-    <!-- 1. CARICAMENTO SDK CRAZYGAMES V3 CORRETTO --> 
-    <script src="https://crazygames.com"></script> 
-</head> 
-<body> 
-
-    <h1>Slot Machine 3x3</h1> 
-    <h2 id="saldo-display">Caricamento saldo...</h2> 
-    
-    <div class="slot-container"> 
-        <!-- Griglia 3x3 --> 
-        <div class="grid" id="slot-grid"> 
-            <div class="cell">🔥</div><div class="cell">🔥</div><div class="cell">🔥</div> 
-            <div class="cell">🔥</div><div class="cell">🔥</div><div class="cell">🔥</div> 
-            <div class="cell">🔥</div><div class="cell">🔥</div><div class="cell">🔥</div> 
-        </div> 
+            font-size: 42px; 
+            height: 90px; 
+            line-height: 90px; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            border: 1px solid #444; 
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
         
-        <!-- Pulsanti di Gioco --> 
-        <button id="btn-gira" onclick="giraSlot()" disabled>GIRA ($5)</button> 
-        <button id="btn-bonus" onclick="riceviBonus()" disabled>📺 BONUS GRATIS (+$100)</button> 
+        .btn { background: #e74c3c; color: white; border: none; padding: 16px; font-size: 22px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; text-transform: uppercase; box-shadow: 0 5px #c0392b; margin-bottom: 12px; }
+        .btn:active { transform: translateY(2px); box-shadow: 0 2px #c0392b; }
+        .btn:disabled { background: #555 !important; box-shadow: none !important; cursor: not-allowed; }
         
-        <div id="status">Inizializzazione SDK in corso...</div> 
-    </div> 
+        .btn-reward { background: #f1c40f; color: #111; border: none; padding: 12px; font-size: 18px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; text-transform: uppercase; box-shadow: 0 5px #f39c12; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-reward:active { transform: translateY(2px); box-shadow: 0 2px #f39c12; }
 
-    <!-- 2. LOGICA DI GIOCO E INTEGRAZIONE SDK --> 
-    <script> 
-        let saldo = 100; 
-        const simboli = ["😜", "🔥", "😎", "💎", "💖"]; 
+        #message { font-size: 18px; margin-top: 20px; color: #f1c40f; font-weight: bold; min-height: 26px; }
 
-        const saldoDisplay = document.getElementById("saldo-display");
-        const btnGira = document.getElementById("btn-gira");
-        const btnBonus = document.getElementById("btn-bonus");
-        const statusTxt = document.getElementById("status");
-        const gridCells = document.querySelectorAll(".cell");
-
-        // Funzione di avvio per inizializzare CrazyGames
-        async function inizializzaGioco() {
-            try {
-                statusTxt.innerText = "Connessione a CrazyGames...";
-                
-                // Inizializza l'SDK ufficiale v3
-                await window.CrazyGames.SDK.init();
-                console.log("CrazyGames SDK inizializzato con successo.");
-
-                // Comunica alla piattaforma l'inizio del gameplay
-                window.CrazyGames.SDK.game.gameplayStart();
-
-                // Recupera i dati salvati
-                recuperaSalvataggi();
-
-                // Gestione dei parametri d'invito multiplayer ("roomName")
-                if (window.CrazyGames?.SDK?.game) {
-                    const nomeStanza = await window.CrazyGames.SDK.game.getInviteParam("roomName");
-                    if (nomeStanza) {
-                        console.log("Giocatore unito tramite invito alla stanza:", nomeStanza);
-                        statusTxt.innerText = "Ti sei unito alla stanza: " + nomeStanza;
-                    } else {
-                        statusTxt.innerText = "Buona fortuna! Nessuna stanza rilevata.";
-                    }
-                }
-
-                // Sblocca i comandi di gioco
-                btnGira.disabled = false;
-                btnBonus.disabled = false;
-            } catch (error) {
-                console.error("Errore nell'inizializzazione dell'SDK:", error);
-                statusTxt.innerText = "Errore SDK. Esecuzione in modalità locale.";
-                
-                aggiornaGraficaSaldo();
-                btnGira.disabled = false;
-                btnBonus.disabled = false;
-            }
+        /* 🎬 SCHERMO ANIMATO CELEBRATIVO "HAI VINTOOO" */
+        #winOverlay {
+            display: none; 
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        // Recupera il saldo dal Cloud di CrazyGames
-        function recuperaSalvataggi() {
-            try {
-                if (window.CrazyGames?.SDK?.data) {
-                    const saldoSalvato = window.CrazyGames.SDK.data.getItem("slot_user_saldo");
-                    if (saldoSalvato !== null) {
-                        saldo = parseInt(saldoSalvato, 10);
-                        console.log("Salvataggio cloud caricato. Saldo:", saldo);
-                    }
-                }
-            } catch (e) {
-                console.warn("Modulo dati SDK non disponibile in locale:", e);
-            }
-            aggiornaGraficaSaldo();
+        .win-text {
+            font-size: 44px;
+            font-weight: bold;
+            color: #f1c40f;
+            text-shadow: 0 0 20px #f39c12, 0 5px 0 #c0392b;
+            animation: pulse 0.4s infinite alternate;
+            margin-bottom: 10px;
+            z-index: 10001; /* Sopra le monete */
         }
 
-        // Salva i progressi nel Cloud di CrazyGames
-        function salvaProgressi() {
-            aggiornaGraficaSaldo();
-            try {
-                if (window.CrazyGames?.SDK?.data) {
-                    window.CrazyGames.SDK.data.setItem("slot_user_saldo", saldo.toString());
-                }
-            } catch (e) {
-                console.error("Errore durante il salvataggio dei progressi:", e);
-            }
+        .win-subtext { 
+            font-size: 36px; 
+            color: #2ecc71; 
+            font-weight: bold; 
+            z-index: 10001; 
         }
 
-        function aggiornaGraficaSaldo() {
-            saldoDisplay.innerText = "$" + saldo;
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.08); }
         }
 
-        function giraSlot() {
-            if (saldo < 5) {
-                statusTxt.innerText = "Fondi insufficienti! Riscatta il bonus gratis.";
+        /* 🪙 SISTEMATO: CSS PER LE MONETE CADENTI VISIBILI */
+        .coin-particle { 
+            position: absolute; 
+            top: -60px; 
+            font-size: 34px; 
+            z-index: 10000; 
+            pointer-events: none;
+            animation: fall linear forwards; 
+        }
+        
+        @keyframes fall { 
+            to { transform: translateY(115vh) rotate(360deg); } 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Schermata Animata di Vincita -->
+    <div id="winOverlay" onclick="chiudiVincita()">
+        <div class="win-text">🎰 HAI VINTOOO! 🎰</div>
+        <div class="win-subtext" id="winAmountText">+$0</div>
+        <p style="color: #888; margin-top: 30px; font-size: 16px; z-index: 10001;">Clicca ovunque per tornare al gioco</p>
+    </div>
+
+    <div class="container">
+        <h1>🎰 VEGAS 3X3 SLOT 🎰</h1>
+        
+        <div class="stats">Monete: $<span id="credits">200</span></div>
+
+        <div class="slot-grid">
+            <div class="cell" id="c0">💖</div><div class="cell" id="c1">🌸</div><div class="cell" id="c2">💎</div>
+            <div class="cell" id="c3">😎</div><div class="cell" id="c4">😜</div><div class="cell" id="c5">🔥</div>
+            <div class="cell" id="c6">💎</div><div class="cell" id="c7">💖</div><div class="cell" id="c8">🌸</div>
+        </div>
+
+        <button class="btn" id="spinBtn" onclick="spin()">GIRA ($5)</button>
+        <button class="btn-reward" id="rewardBtn" onclick="guardaAdPerMonete()">📺 Bonus Gratis (+$100)</button>
+        
+        <div id="message">Fai girare i rulli!</div>
+    </div>
+
+    <script>
+        const simboli = ['💖', '🌸', '💎', '😎', '😜', '🔥'];
+        const COSTO_GIRO = 5;
+        let monete = 255; // Partiamo dal valore del tuo screenshot!
+
+        document.getElementById('credits').innerText = monete;
+
+        function spin() {
+            if (monete < COSTO_GIRO) {
+                document.getElementById('message').innerText = "❌ Monete finite! Ricarica cliccando sotto.";
                 return;
             }
 
-            saldo -= 5;
-            salvaProgressi();
-            statusTxt.innerText = "I rulli girano...";
+            chiudiVincita();
+            monete -= COSTO_GIRO;
+            document.getElementById('credits').innerText = monete;
+            document.getElementById('spinBtn').disabled = true;
+            document.getElementById('message').innerText = "I rulli girano...";
 
-            let risultati = [];
-            gridCells.forEach(cell => {
-                const simboloCasuale = simboli[Math.floor(Math.random() * simboli.length)];
-                cell.innerText = simboloCasuale;
-                risultati.push(simboloCasuale);
-            });
+            let giriEffettuati = 0;
+            
+            let timerAnimazione = setInterval(function() {
+                for (let i = 0; i < 9; i++) {
+                    let simCasuale = simboli[Math.floor(Math.random() * simboli.length)];
+                    document.getElementById('c' + i).innerText = simCasuale;
+                }
+                giriEffettuati++;
 
-            // LOGICA DI VINCITA CORRETTA AL 100%
-            const riga1 = (risultati[0] === risultati[1] && risultati[1] === risultati[2]);
-            const riga2 = (risultati[3] === risultati[4] && risultati[4] === risultati[5]);
-            const riga3 = (risultati[6] === risultati[7] && risultati[7] === risultati[8]);
+                if (giriEffettuati >= 10) {
+                    clearInterval(timerAnimazione);
 
-            if (riga1 || riga2 || riga3) {
-                const vincita = 50;
-                saldo += vincita;
-                statusTxt.innerText = "TRIPLO SIMBOLO! Hai vinto $" + vincita + "! 🎉";
-                salvaProgressi();
-            } else {
-                statusTxt.innerText = "Ritenta! La fortuna gira.";
-            }
-        }
+                    let r0 = simboli[Math.floor(Math.random() * simboli.length)];
+                    let r1 = simboli[Math.floor(Math.random() * simboli.length)];
+                    let r2 = simboli[Math.floor(Math.random() * simboli.length)];
+                    let r3 = simboli[Math.floor(Math.random() * simboli.length)];
+                    let r4 = simboli[Math.floor(Math.random() * simboli.length)];
+                    let r5 = simboli[Math.floor(Math.random() * simboli.length)];
+                    let r6 = simboli[Math.floor(Math.random() * simboli.length)];
+                    let r7 = simboli[Math.floor(Math.random() * simboli.length)];
+                    let r8 = simboli[Math.floor(Math.random() * simboli.length)];
 
-        // Gestione del video pubblicitario premiato (Rewarded Ad)
-        function riceviBonus() {
-            if (window.CrazyGames?.SDK?.ad) {
-                btnGira.disabled = true;
-                btnBonus.disabled = true;
-                statusTxt.innerText = "Caricamento dell'annuncio...";
+                    document.getElementById('c0').innerText = r0;
+                    document.getElementById('c1').innerText = r1;
+                    document.getElementById('c2').innerText = r2;
+                    document.getElementById('c3').innerText = r3;
+                    document.getElementById('c4').innerText = r4;
+                    document.getElementById('c5').innerText = r5;
+                    document.getElementById('c6').innerText = r6;
+                    document.getElementById('c7').innerText = r7;
+                    document.getElementById('c8').innerText = r8;
 
-                window.CrazyGames.SDK.ad.requestAd("rewarded", {
-                    adStarted: () => {
-                        statusTxt.innerText = "Guarda tutto l'annuncio per riscuotere il tuo bonus.";
-                    },
-                    adFinished: () => {
-                        saldo += 100;
-                        statusTxt.innerText = "Bonus di $100 accreditato! 🎁";
-                        salvaProgressi();
-                        btnGira.disabled = false;
-                        btnBonus.disabled = false;
-                    },
-                    adError: (error) => {
-                        console.error("Errore ad:", error);
-                        statusTxt.innerText = "Impossibile caricare il video. Riprova più tardi.";
-                        btnGira.disabled = false;
-                        btnBonus.disabled = false;
+                    let vincitaTotale = 0;
+                    let lineeVincenti = 0;
+
+                    if (r0 === r1 && r1 === r2) { vincitaTotale += 30; lineeVincenti++; }
+                    if (r3 === r4 && r4 === r5) { vincitaTotale += 30; lineeVincenti++; }
+                    if (r6 === r7 && r7 === r8) { vincitaTotale += 30; lineeVincenti++; }
+
+                    if (r0 === r3 && r3 === r6) { vincitaTotale += 30; lineeVincenti++; }
+                    if (r1 === r4 && r4 === r7) { vincitaTotale += 30; lineeVincenti++; }
+                    if (r2 === r5 && r5 === r8) { vincitaTotale += 30; lineeVincenti++; }
+
+                    if (r0 === r4 && r4 === r8) { vincitaTotale += 50; lineeVincenti++; }
+                    if (r2 === r4 && r4 === r6) { vincitaTotale += 50; lineeVincenti++; }
+
+                    if (lineeVincenti > 0) {
+                        monete += vincitaTotale;
+                        document.getElementById('credits').innerText = monete;
+                        document.getElementById('message').innerText = "🎉 HAI VINTO! $" + vincitaTotale;
+                        mostraSchermataVincita(vincitaTotale);
+                    } else {
+                        document.getElementById('message').innerText = "😢 Non hai vinto. Riprova!";
                     }
-                });
-            } else {
-                statusTxt.innerText = "Annunci non disponibili in modalità locale.";
-            }
+
+                    document.getElementById('spinBtn').disabled = false;
+                }
+            }, 100);
         }
 
-        // Attivazione automatica dell'inizializzazione
-        window.addEventListener("DOMContentLoaded", inizializzaGioco);
-    </script> 
-</body> 
-</html>
+        function mostraSchermataVincita(importo) {
+            const overlay = document.getElementById('winOverlay');
+            document.getElementById('winAmountText').innerText = "+$" + importo;
+            overlay.style.display = 'flex';
+
+            // Genera la pioggia di elementi grafici visibili a schermo
+            const elementi = ['🪙', '💰', '🎉', '✨', '💎'];
+            for (let i = 0; i < 35; i++) {
+                setTimeout(() => {
+                    const moneta = document.createElement('div');
+                    moneta.innerText = elementi[Math.floor(Math.random() * elementi.length)];
+                    moneta.className = 'coin-particle';
+                    moneta.style.left = Math.random() * 90 + 'vw';
+                    moneta.style.animationDuration = (Math.random() * 1.5 + 1.5) + 's';
+                    overlay.appendChild(moneta);
+                    
+                    // Rimuove l'emoticon per non appesantire il telefono dopo la caduta
+                    setTimeout(() => { moneta.remove(); }, 3000);
+                }, i * 80);
 
