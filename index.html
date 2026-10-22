@@ -108,13 +108,12 @@
                 // Recupera i dati salvati
                 recuperaSalvataggi();
 
-                // INTEGRATO: Gestione dei parametri d'invito multiplayer ("roomName")
+                // Gestione dei parametri d'invito multiplayer ("roomName")
                 if (window.CrazyGames?.SDK?.game) {
-                    const nomeStanza = window.CrazyGames.SDK.game.getInviteParam("roomName");
+                    const nomeStanza = await window.CrazyGames.SDK.game.getInviteParam("roomName");
                     if (nomeStanza) {
                         console.log("Giocatore unito tramite invito alla stanza:", nomeStanza);
                         statusTxt.innerText = "Ti sei unito alla stanza: " + nomeStanza;
-                        // Inserisci qui la tua funzione logica multiplayer per connettere la slot al server della stanza
                     } else {
                         statusTxt.innerText = "Buona fortuna! Nessuna stanza rilevata.";
                     }
@@ -182,8 +181,9 @@
                 risultati.push(simboloCasuale);
             });
 
+            // LOGICA DI VINCITA CORRETTA AL 100%
             const riga1 = (risultati[0] === risultati[1] && risultati[1] === risultati[2]);
-            const riga2 = (risultati[3] === risultati[4] && risultati[4] === Bird = risultati[5]);
+            const riga2 = (risultati[3] === risultati[4] && risultati[4] === risultati[5]);
             const riga3 = (risultati[6] === risultati[7] && risultati[7] === risultati[8]);
 
             if (riga1 || riga2 || riga3) {
@@ -226,8 +226,9 @@
             }
         }
 
-        // ATTIVAZIONE AUTOMATICA AL CARICAMENTO DELLA PAGINA DOM
+        // Attivazione automatica dell'inizializzazione
         window.addEventListener("DOMContentLoaded", inizializzaGioco);
     </script> 
 </body> 
 </html>
+
