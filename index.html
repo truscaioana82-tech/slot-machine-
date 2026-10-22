@@ -27,7 +27,7 @@
         .xp-bar-container { background: #333; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px; }
         .xp-bar { background: #f1c40f; height: 100%; width: 0%; transition: width 0.3s; }
         
-        /* Box Banner Pubblicitario in CSS Nativo (Niente Immagini Rotte) */
+        /* Box Banner Pubblicitario in CSS Nativo */
         .adsterra-banner-container { 
             margin: 0 auto 20px auto; 
             width: 300px; 
@@ -89,17 +89,12 @@
             </div>
         </div>
 
-        <!-- ======================================================= -->
-        <!-- AREA CONTENITORE BANNER PUBBLICITARIO REALE             -->
-        <!-- ======================================================= -->
         <div class="adsterra-banner-container">
-            <!-- Quando riceverai il codice script del banner da Adsterra, cancella l'intero tag <a> qui sotto e incolla al suo posto lo script della dashboard -->
             <a class="adsterra-banner-link" href="https://adsterra.com" target="_blank" rel="nofollow">
                 <span>🎁 BONUS PREMIUM 🎁</span>
                 <small>Riscatta Ora</small>
             </a>
         </div>
-        <!-- ======================================================= -->
 
         <div class="slot-machine">
             <div class="reels">
@@ -113,7 +108,6 @@
 
         <div id="message">Benvenuto! Clicca su Gira!</div>
 
-        <!-- Box Referral in fondo alla card -->
         <div class="referral-box">
             <p>Vuoi guadagnare anche tu con la pubblicità?</p>
             <a class="ref-link" href="https://adsterra.com" rel="nofollow" target="_blank"> 🚀 Iscriviti gratis su Adsterra</a>
@@ -138,19 +132,46 @@
             document.getElementById('spinBtn').disabled = true;
             updateMessage("I rulli girano...");
 
+            // ALGORITMO DI CONTROLLO DELLE VINCITE
+            // Genera un numero casuale tra 1 e 100. L'utente ha solo il 5% di possibilità di fare un tris reale.
+            let chance = Math.floor(Math.random() * 100) + 1;
+            let isWinningTurn = (chance <= 5); 
+
             let count = 0;
             let interval = setInterval(() => {
-                document.getElementById('reel1').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                document.getElementById('reel2').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                document.getElementById('reel3').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                count++;
-                
-                if (count > 12) {
+                if (count < 12) {
+                    document.getElementById('reel1').innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                    document.getElementById('reel2').innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                    document.getElementById('reel3').innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                } else {
                     clearInterval(interval);
+                    
+                    if (isWinningTurn) {
+                        // Forza una combinazione vincente (tris)
+                        let winningSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+                        document.getElementById('reel1').innerText = winningSymbol;
+                        document.getElementById('reel2').innerText = winningSymbol;
+                        document.getElementById('reel3').innerText = winningSymbol;
+                    } else {
+                        // Forza una perdita garantita (i rulli non saranno mai uguali)
+                        let r1 = symbols[Math.floor(Math.random() * symbols.length)];
+                        let r2 = symbols[Math.floor(Math.random() * symbols.length)];
+                        let r3 = symbols[Math.floor(Math.random() * symbols.length)];
+                        
+                        while (r3 === r1 && r3 === r2) {
+                            r3 = symbols[Math.floor(Math.random() * symbols.length)];
+                        }
+                        
+                        document.getElementById('reel1').innerText = r1;
+                        document.getElementById('reel2').innerText = r2;
+                        document.getElementById('reel3').innerText = r3;
+                    }
+
                     document.getElementById('spinBtn').disabled = false;
                     checkWin();
                     gainXP(15);
                 }
+                count++;
             }, 80);
         }
 
@@ -166,8 +187,9 @@
                 updateMessage("🎉 TRIS! Hai vinto $" + win + "! 🎉");
                 gainXP(40);
             } else if (r1 === r2 || r2 === r3 || r1 === r3) {
-                credits += 15;
-                updateMessage("😅 COPPIA! Rimani in gara (+ $15)");
+                // Coppia (paga poco per mantenere l'utente attivo senza dargli troppo profitto)
+                credits += 5;
+                updateMessage("😅 COPPIA! Rimani in gara (+ $5)");
             } else {
                 updateMessage("Ritenta! La fortuna gira.");
             }
@@ -178,31 +200,3 @@
 
         function gainXP(amount) {
             xp += amount;
-            if (xp >= xpPerLevel) {
-                xp = xp - xpPerLevel;
-                level++;
-                document.getElementById('level').innerText = level;
-                credits += 50;
-                updateMessage("🌟 LIVELLO SUPERATO! Livello " + level + " (+$50) 🌟");
-            }
-            document.getElementById('xpBar').style.width = (xp / xpPerLevel * 100) + '%';
-        }
-
-        function checkCreditsStatus() {
-            if (credits < 10) {
-                document.getElementById('adBtn').style.display = 'block';
-                document.getElementById('spinBtn').disabled = true;
-            } else {
-                document.getElementById('adBtn').style.display = 'none';
-                document.getElementById('spinBtn').disabled = false;
-            }
-        }
-
-        function watchAd() {
-            updateMessage("🎬 Caricamento pubblicità...");
-            document.getElementById('adBtn').disabled = true;
-            
-            window.open("https://adsterra.com", "_blank");
-
-            setTimeout(() => {
-                credits += 60;
