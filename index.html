@@ -22,20 +22,6 @@
         #message { font-size: 20px; margin: 15px 0; height: 28px; font-weight: bold; color: #f1c40f; }
         .xp-bar-container { background: #333; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px; }
         .xp-bar { background: #f1c40f; height: 100%; width: 0%; transition: width 0.3s; }
-        
-        .adsterra-banner-container { 
-            margin: 0 auto 20px auto; 
-            width: 300px; 
-            height: 250px; 
-            background: linear-gradient(135deg, #e74c3c, #9b59b6); 
-            border-radius: 15px; 
-            border: 2px solid #f1c40f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
 
         .ad-overlay {
             display: none;
@@ -52,18 +38,17 @@
         }
         .ad-overlay h2 { color: #e74c3c; font-size: 26px; margin-bottom: 10px; }
         .ad-overlay p { color: #ccc; font-size: 16px; margin-bottom: 25px; }
-        .btn-ad-trigger { background: #2ecc71; color: white; box-shadow: 0 5px #27ae60; font-size: 18px; padding: 16px; width: 90%; text-decoration: none; display: block; border-radius: 10px; font-weight: bold; text-transform: uppercase; box-sizing: border-box; }
+        .btn-ad-trigger { background: #2ecc71; color: white; border: none; font-size: 18px; padding: 16px; width: 90%; cursor: pointer; display: block; border-radius: 10px; font-weight: bold; text-transform: uppercase; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Schermata blocco monete esaurite -->
+        <!-- Schermata di ricarica interna protetta -->
         <div class="ad-overlay" id="adOverlay">
             <h2> 💸 CREDITI ESAURITI! 💸</h2>
-            <p>Hai finito le monete. Clicca qui sotto per aprire la pubblicità sponsorizzata e ottenere subito +60 crediti gratis!</p>
-            <!-- Incolla il link copiato da Adsterra dentro href="..." se vuoi che porti lì, altrimenti lascialo così per testare lo sblocco -->
-            <a href="https://adsterra.com" target="_blank" class="btn-ad-trigger" id="adBtn" onclick="claimCredits()">📺 Guarda Pubblicità</a>
+            <p>Hai finito le monete. Ricevi subito una ricarica gratuita di +60 crediti per continuare a giocare!</p>
+            <button class="btn-ad-trigger" id="adBtn" onclick="claimCredits()">📺 Ricarica Crediti</button>
         </div>
 
         <h1>🎰 VEGAS GOLD SLOT 🎰</h1>
@@ -73,12 +58,6 @@
             <div class="stat-box">Monete <span>$ <span id="credits">100</span></span></div>
             <div class="stat-box">Livello <span id="level">1</span>
                 <div class="xp-bar-container"><div class="xp-bar" id="xpBar"></div></div>
-            </div>
-        </div>
-
-        <div class="adsterra-banner-container">
-            <div id="container-adsterra-banner">
-                <p style="font-weight: bold; color: gold; margin: 0;">🎁 BONUS PREMIO DISPONIBILE 🎁</p>
             </div>
         </div>
 
@@ -101,21 +80,15 @@
         let level = 1;
         const xpPerLevel = 100;
 
-        // Inizializzazione protetta all'avvio della pagina
         window.onload = function() {
-            try {
-                credits = 100;
-                level = 1;
-                xp = 0;
-                document.getElementById('credits').innerText = credits;
-                document.getElementById('level').innerText = level;
-                document.getElementById('xpBar').style.width = '0%';
-                document.getElementById('adOverlay').style.display = 'none';
-                document.getElementById('spinBtn').disabled = false;
-                updateMessage("Benvenuto! Clicca su Gira!");
-            } catch(e) {
-                console.log("Errore inizializzazione: ", e);
-            }
+            credits = 100;
+            level = 1;
+            xp = 0;
+            document.getElementById('credits').innerText = credits;
+            document.getElementById('level').innerText = level;
+            document.getElementById('xpBar').style.width = '0%';
+            document.getElementById('adOverlay').style.display = 'none';
+            document.getElementById('spinBtn').disabled = false;
         };
 
         function spin() {
@@ -129,46 +102,41 @@
             document.getElementById('spinBtn').disabled = true;
             updateMessage("I rulli girano...");
 
+            // Probabilità bilanciata per consumare i gettoni
             let chance = Math.floor(Math.random() * 100) + 1;
-            let isWinningTurn = (chance <= 3); 
+            let isWinningTurn = (chance <= 5); 
 
             let count = 0;
             let interval = setInterval(() => {
-                try {
-                    if (count < 10) {
-                        document.getElementById('reel1').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                        document.getElementById('reel2').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                        document.getElementById('reel3').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                    } else {
-                        clearInterval(interval);
-                        
-                        if (isWinningTurn) {
-                            let winningSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-                            document.getElementById('reel1').innerText = winningSymbol;
-                            document.getElementById('reel2').innerText = winningSymbol;
-                            document.getElementById('reel3').innerText = winningSymbol;
-                        } else {
-                            let r1 = symbols[Math.floor(Math.random() * symbols.length)];
-                            let r2 = symbols[Math.floor(Math.random() * symbols.length)];
-                            let r3 = symbols[Math.floor(Math.random() * symbols.length)];
-                            
-                            while (r3 === r1 && r3 === r2) {
-                                r3 = symbols[Math.floor(Math.random() * symbols.length)];
-                            }
-                            document.getElementById('reel1').innerText = r1;
-                            document.getElementById('reel2').innerText = r2;
-                            document.getElementById('reel3').innerText = r3;
-                        }
-
-                        document.getElementById('spinBtn').disabled = false;
-                        checkWin();
-                        gainXP(15);
-                    }
-                    count++;
-                } catch(e) {
+                if (count < 10) {
+                    document.getElementById('reel1').innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                    document.getElementById('reel2').innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                    document.getElementById('reel3').innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                } else {
                     clearInterval(interval);
+                    
+                    if (isWinningTurn) {
+                        let winningSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+                        document.getElementById('reel1').innerText = winningSymbol;
+                        document.getElementById('reel2').innerText = winningSymbol;
+                        document.getElementById('reel3').innerText = winningSymbol;
+                    } else {
+                        let r1 = symbols[Math.floor(Math.random() * symbols.length)];
+                        let r2 = symbols[Math.floor(Math.random() * symbols.length)];
+                        let r3 = symbols[Math.floor(Math.random() * symbols.length)];
+                        while (r3 === r1 && r3 === r2) {
+                            r3 = symbols[Math.floor(Math.random() * symbols.length)];
+                        }
+                        document.getElementById('reel1').innerText = r1;
+                        document.getElementById('reel2').innerText = r2;
+                        document.getElementById('reel3').innerText = r3;
+                    }
+
                     document.getElementById('spinBtn').disabled = false;
+                    checkWin();
+                    gainXP(15);
                 }
+                count++;
             }, 90);
         }
 
@@ -178,8 +146,8 @@
             const r3 = document.getElementById('reel3').innerText;
 
             if (r1 === r2 && r2 === r3) {
-                credits += 40;
-                updateMessage("🎉 TRIS! Hai vinto $40! 🎉");
+                credits += 30;
+                updateMessage("🎉 TRIS! Hai vinto $30! 🎉");
             } else {
                 updateMessage("Ritenta! La fortuna gira.");
             }
@@ -198,3 +166,29 @@
             }
             document.getElementById('xpBar').style.width = (xp / xpPerLevel * 100) + '%';
             document.getElementById('credits').innerText = credits;
+            checkCreditsStatus();
+        }
+
+        function checkCreditsStatus() {
+            if (credits < 10) {
+                document.getElementById('adOverlay').style.display = 'flex';
+                document.getElementById('spinBtn').disabled = true;
+            } else {
+                document.getElementById('adOverlay').style.display = 'none';
+                document.getElementById('spinBtn').disabled = false;
+            }
+        }
+
+        function claimCredits() {
+            credits += 60;
+            document.getElementById('credits').innerText = credits;
+            checkCreditsStatus();
+            updateMessage("✅ +60 Monete accreditate!");
+        }
+
+        function updateMessage(text) {
+            document.getElementById('message').innerText = text;
+        }
+    </script>
+</body>
+</html>
