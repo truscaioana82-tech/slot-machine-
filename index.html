@@ -1,132 +1,73 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vegas Gold Slot</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121214; text-align: center; color: white; padding: 20px; margin: 0; }
-        /* Allargato a 600px per fare spazio a 5 rulli */
-        .container { max-width: 600px; margin: 20px auto; background: #1a1a1e; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); border: 1px solid #2f2f37; position: relative; }
-        h1 { color: #f1c40f; font-size: 28px; margin-bottom: 5px; text-shadow: 0 0 10px rgba(241,196,15,0.3); }
-        .stats-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 25px; background: #26262b; padding: 15px; border-radius: 12px; }
-        .stat-box { font-size: 16px; color: #aaa; text-align: center; }
-        .stat-box span { display: block; font-size: 22px; font-weight: bold; color: #fff; margin-top: 5px; }
-        .stat-box #credits { color: #2ecc71; }
-        .slot-machine { background: #111; border: 4px solid #f1c40f; border-radius: 15px; padding: 20px; margin-bottom: 20px; position: relative; }
-        /* Griglia ottimizzata per gestire 5 elementi affiancati */
-        .reels { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: nowrap; }
-        .reel { background: #fff; color: #000; font-size: 45px; width: 85px; height: 100px; line-height: 100px; border-radius: 10px; font-weight: bold; }
-        .btn { border: none; padding: 15px 35px; font-size: 20px; font-weight: bold; border-radius: 10px; cursor: pointer; width: 100%; text-transform: uppercase; }
-        .btn-spin { background: #e74c3c; color: white; box-shadow: 0 5px #c0392b; margin-bottom: 15px; }
-        .btn-spin:active { transform: translateY(3px); box-shadow: 0 2px #c0392b; }
-        .btn-spin:disabled { background: #555 !important; box-shadow: none !important; cursor: not-allowed; }
-        #message { font-size: 20px; margin: 15px 0; height: 28px; font-weight: bold; color: #f1c40f; }
-        
-        .ad-overlay {
-            display: none;
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(18, 18, 20, 0.98);
-            z-index: 100;
-            border-radius: 20px;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 30px;
-            box-sizing: border-box;
-        }
-        .ad-overlay h2 { color: #e74c3c; font-size: 26px; margin-bottom: 10px; }
-        .ad-overlay p { color: #ccc; font-size: 16px; margin-bottom: 25px; }
-        .btn-ad-trigger { background: #2ecc71; color: white; font-size: 18px; padding: 16px; width: 90%; text-decoration: none; display: block; border-radius: 10px; font-weight: bold; text-transform: uppercase; box-sizing: border-box; }
-
-        /* Stili per i Banner Pubblicitari */
-        .ad-banner-container {
-            margin: 15px auto;
-            padding: 10px;
-            background: #222227;
-            border: 1px dashed #444;
-            border-radius: 10px;
-            max-width: 100%;
-            min-height: 90px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-size: 12px;
-            box-sizing: border-box;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- BANNER PUBBLICITARIO SUPERIORE (Esterno al container del gioco) -->
-    <div class="ad-banner-container">
-        <!-- SOSTITUISCI QUESTO TESTO CON IL CODICE SCRIPT DEL TUO CIRCUITO AD (es. Google AdSense o Adsterra) -->
-        <span>SPAZIO PUBBLICITARIO SUPERIORE (Es. Banner 728x90 o 468x60)</span>
-    </div>
-
-    <div class="container">
-        <!-- Schermata di blocco monete esaurite -->
-        <div class="ad-overlay" id="adOverlay">
-            <h2> 💸 CREDITI ESAURITI! 💸</h2>
-            <p>Hai finito le monete. Clicca qui sotto per aprire la pubblicità e ottenere subito +60 crediti gratis!</p>
-            <a href="https://asiafilm.org" target="_blank" class="btn-ad-trigger" id="adBtn" onclick="claimCredits()">Aggiungi Crediti</a>
-        </div>
-
-        <h1>🎰 VEGAS GOLD SLOT 🎰</h1>
-        <p style="color: #666; margin: 0 0 20px 0; font-size: 14px;">Gioca gratis</p>
-
-        <div class="stats-grid">
-            <div class="stat-box">Monete <span>$ <span id="credits">100</span></span></div>
-        </div>
-
-        <div class="slot-machine">
-            <!-- Aggiunti Reel 4 e Reel 5 alla struttura -->
-            <div class="reels">
-                <div class="reel" id="reel1">🍒</div>
-                <div class="reel" id="reel2">🍋</div>
-                <div class="reel" id="reel3">🍇</div>
-                <div class="reel" id="reel4">🔔</div>
-                <div class="reel" id="reel5">💎</div>
-            </div>
-            <button class="btn btn-spin" id="spinBtn" onclick="spin()">Gira ($10)</button>
-        </div>
-
-        <div id="message">Benvenuto! Clicca su Gira!</div>
-    </div>
-
-    <!-- BANNER PUBBLICITARIO INFERIORE (Esterno al container del gioco) -->
-    <div class="ad-banner-container">
-        <!-- SOSTITUISCI QUESTO TESTO CON IL CODICE SCRIPT DEL TUO CIRCUITO AD -->
-        <span>SPAZIO PUBBLICITARIO INFERIORE (Es. Banner Native o Display)</span>
-    </div>
-
     <script>
         const symbols = ['🍒', '🍋', '🍇', '🔔', '💎', '7️⃣'];
-        let credits = 100;
+        let credits = 200; 
+        const SPIN_COST = 5; 
+
+        // CONFIGURAZIONE VIDEO PUBBLICITARI
+        let spinCounter = 0; 
+        const GIRI_PER_MOSTRARE_VIDEO = 3; // Modificato a 3 giri su tua richiesta
 
         window.onload = function() {
-            credits = 100;
             document.getElementById('credits').innerText = credits;
+            document.getElementById('spinBtn').innerText = `Gira ($${SPIN_COST})`;
             document.getElementById('adOverlay').style.display = 'none';
             document.getElementById('spinBtn').disabled = false;
         };
 
+        function showVideoAd() {
+            // 1. Schermata di blocco temporanea per la riproduzione del video
+            const overlay = document.getElementById('adOverlay');
+            overlay.innerHTML = `
+                <h2>📺 GUARDA IL VIDEO</h2>
+                <p>Un breve sponsor per sbloccare i prossimi 3 giri della slot machine!</p>
+                <div style="margin: 20px auto; width: 50px; height: 50px; border: 5px solid #333; border-top: 5px solid #f1c40f; border-radius: 50%; animation: ad-spin 1s linear infinite;"></div>
+                <style>
+                    @keyframes ad-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                </style>
+            `;
+            overlay.style.display = 'flex';
+            document.getElementById('spinBtn').disabled = true;
+
+            // 2. INTEGRAZIONE DEL TUO SCRIPT VIDEO REALE
+            // Al momento simula una durata di 5 secondi, poi chiude il video e fa continuare il gioco
+            
+            /* --- INCOLLA QUI IL CODICE INTERSTITIAL/VIDEO DEL TUO AD NETWORK (Es. Adsterra, Monetag) --- */
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                document.getElementById('spinBtn').disabled = false;
+                document.getElementById('message').innerText = "✅ Video completato! Altri 3 giri sbloccati.";
+                
+                // Ripristino della struttura predefinita in caso di crediti esauriti
+                overlay.innerHTML = `
+                    <h2> 💸 CREDITI ESAURITI! 💸</h2>
+                    <p>Hai finito le monete. Clicca qui sotto per aprire la pubblicità e ottenere subito +100 crediti gratis!</p>
+                    <a href="https://asiafilm.org" target="_blank" class="btn-ad-trigger" id="adBtn" onclick="claimCredits()">Aggiungi Crediti</a>
+                `;
+            }, 5000); // Puoi modificare i 5000 millisecondi (5 secondi) in base alla durata media dello spot
+        }
+
         function spin() {
-            if (credits < 10) {
+            if (credits < SPIN_COST) {
                 checkCreditsStatus();
                 return;
             }
 
-            credits -= 10;
+            // Controllo della frequenza: si attiva precisamente al terzo giro eseguito
+            spinCounter++;
+            if (spinCounter >= GIRI_PER_MOSTRARE_VIDEO) {
+                spinCounter = 0; // Azzera il contatore per i successivi 3 giri
+                showVideoAd();   // Lancia l'interstitial video
+                return;
+            }
+
+            credits -= SPIN_COST;
             document.getElementById('credits').innerText = credits;
             document.getElementById('spinBtn').disabled = true;
             document.getElementById('message').innerText = "I rulli girano...";
 
             let count = 0;
             let interval = setInterval(() => {
-                // Aggiornamento grafico simultaneo di tutti e 5 i rulli durante la rotazione
                 document.getElementById('reel1').innerText = symbols[Math.floor(Math.random() * symbols.length)];
                 document.getElementById('reel2').innerText = symbols[Math.floor(Math.random() * symbols.length)];
                 document.getElementById('reel3').innerText = symbols[Math.floor(Math.random() * symbols.length)];
@@ -137,17 +78,11 @@
                 if (count >= 10) {
                     clearInterval(interval);
                     
-                    // Logica di generazione dei risultati finali per 5 rulli
                     let r1 = symbols[Math.floor(Math.random() * symbols.length)];
                     let r2 = symbols[Math.floor(Math.random() * symbols.length)];
                     let r3 = symbols[Math.floor(Math.random() * symbols.length)];
                     let r4 = symbols[Math.floor(Math.random() * symbols.length)];
                     let r5 = symbols[Math.floor(Math.random() * symbols.length)];
-                    
-                    // Assicura che i rulli non siano tutti uguali per bilanciare il consumo dei crediti
-                    while (r5 === r1 && r5 === r2 && r5 === r3 && r5 === r4) {
-                        r5 = symbols[Math.floor(Math.random() * symbols.length)];
-                    }
                     
                     document.getElementById('reel1').innerText = r1;
                     document.getElementById('reel2').innerText = r2;
@@ -155,15 +90,46 @@
                     document.getElementById('reel4').innerText = r4;
                     document.getElementById('reel5').innerText = r5;
 
+                    const risultati = [r1, r2, r3, r4, r5];
+                    const conteggi = {};
+                    let maxCombinazione = 0;
+
+                    risultati.forEach(simbolo => {
+                        conteggi[simbolo] = (conteggi[simbolo] || 0) + 1;
+                        if (conteggi[simbolo] > maxCombinazione) {
+                            maxCombinazione = conteggi[simbolo];
+                        }
+                    });
+
+                    if (maxCombinazione === 5) {
+                        let vincita = 150;
+                        credits += vincita;
+                        document.getElementById('message').innerText = `🎉 JACKPOT ASSOLUTO! +$${vincita} 🎉`;
+                    } else if (maxCombinazione === 4) {
+                        let vincita = 50;
+                        credits += vincita;
+                        document.getElementById('message').innerText = `💰 Grande Vincita! +$${vincita} 💰`;
+                    } else if (maxCombinazione === 3) {
+                        let vincita = 15;
+                        credits += vincita;
+                        document.getElementById('message').innerText = `✨ Tris Vincente! +$${vincita} ✨`;
+                    } else if (maxCombinazione === 2) {
+                        let vincita = 4; 
+                        credits += vincita;
+                        document.getElementById('message').innerText = `👍 Coppia! Recuperi +$${vincita}`;
+                    } else {
+                        document.getElementById('message').innerText = "Ritenta! La fortuna gira.";
+                    }
+
+                    document.getElementById('credits').innerText = credits;
                     document.getElementById('spinBtn').disabled = false;
-                    document.getElementById('message').innerText = "Ritenta! La fortuna gira.";
                     checkCreditsStatus();
                 }
             }, 100);
         }
 
         function checkCreditsStatus() {
-            if (credits < 10) {
+            if (credits < SPIN_COST) {
                 document.getElementById('adOverlay').style.display = 'flex';
                 document.getElementById('spinBtn').disabled = true;
             } else {
@@ -173,12 +139,9 @@
         }
 
         function claimCredits() {
-            // Riaccredita immediatamente i gettoni e aggiorna lo stato per sbloccare la schermata di overlay
-            credits = 60;
+            credits = 100; 
             document.getElementById('credits').innerText = credits;
             checkCreditsStatus();
-            document.getElementById('message').innerText = "✅ +60 Monete accreditate!";
+            document.getElementById('message').innerText = "✅ +100 Monete accreditate!";
         }
     </script>
-</body>
-</html>
