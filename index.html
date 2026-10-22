@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Slot Premium</title>
+    <title>Vegas Gold Slot</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121214; text-align: center; color: white; padding: 20px; margin: 0; }
         .container { max-width: 500px; margin: 20px auto; background: #1a1a1e; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); border: 1px solid #2f2f37; position: relative; }
@@ -41,7 +41,7 @@
             display: none;
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(18, 18, 20, 0.96);
+            background: rgba(18, 18, 20, 0.98);
             z-index: 100;
             border-radius: 20px;
             flex-direction: column;
@@ -52,18 +52,17 @@
         }
         .ad-overlay h2 { color: #e74c3c; font-size: 26px; margin-bottom: 10px; }
         .ad-overlay p { color: #ccc; font-size: 16px; margin-bottom: 25px; }
-        .btn-ad-trigger { background: #2ecc71; color: white; box-shadow: 0 5px #27ae60; font-size: 18px; padding: 16px; width: 90%; text-decoration: none; display: block; border-radius: 10px; font-weight: bold; text-transform: uppercase; }
+        .btn-ad-trigger { background: #2ecc71; color: white; box-shadow: 0 5px #27ae60; font-size: 18px; padding: 16px; width: 90%; text-decoration: none; display: block; border-radius: 10px; font-weight: bold; text-transform: uppercase; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Schermata di blocco automatica -->
+        <!-- Schermata blocco monete esaurite -->
         <div class="ad-overlay" id="adOverlay">
             <h2> 💸 CREDITI ESAURITI! 💸</h2>
-            <p>Hai finito le monete. Clicca sul pulsante qui sotto per aprire lo sponsor e ricevere una ricarica gratuita!</p>
-            <!-- L'uso di un tag 'a' nativo previene i blocchi di sicurezza dei browser mobile -->
-            <a href="https://adsterra.com" target="_blank" class="btn-ad-trigger" id="adBtn" onclick="claimCredits()">📺 Apri Sponsor e Ricarica</a>
+            <p>Hai finito le monete. Clicca qui sotto per aprire la pubblicità sponsorizzata e ottenere subito +60 crediti gratis!</p>
+            <a href="https://adsterra.com" target="_blank" class="btn-ad-trigger" id="adBtn" onclick="claimCredits()">📺 Guarda Pubblicità</a>
         </div>
 
         <h1>🎰 VEGAS GOLD SLOT 🎰</h1>
@@ -78,7 +77,7 @@
 
         <div class="adsterra-banner-container">
             <div id="container-adsterra-banner">
-                <p style="font-weight: bold; color: gold; margin: 0;">🎁 BONUS DISPONIBILE 🎁</p>
+                <p style="font-weight: bold; color: gold; margin: 0;">🎁 BONUS PREMIO DISPONIBILE 🎁</p>
             </div>
         </div>
 
@@ -112,7 +111,7 @@
             document.getElementById('spinBtn').disabled = true;
             updateMessage("I rulli girano...");
 
-            // Controllo vincita impostato a una probabilità del 3%
+            // Probabilità di vincita reale bloccata al 3% per far perdere velocemente l'utente
             let chance = Math.floor(Math.random() * 100) + 1;
             let isWinningTurn = (chance <= 3); 
 
@@ -131,15 +130,17 @@
                         document.getElementById('reel2').innerText = winningSymbol;
                         document.getElementById('reel3').innerText = winningSymbol;
                     } else {
+                        // Generazione casuale forzata di perdita matematica (Risolto l'errore di crash)
                         let r1 = symbols[Math.floor(Math.random() * symbols.length)];
                         let r2 = symbols[Math.floor(Math.random() * symbols.length)];
                         let r3 = symbols[Math.floor(Math.random() * symbols.length)];
+                        
                         while (r3 === r1 && r3 === r2) {
                             r3 = symbols[Math.floor(Math.random() * symbols.length)];
                         }
                         document.getElementById('reel1').innerText = r1;
                         document.getElementById('reel2').innerText = r2;
-                        document.getElementById('reel3').innerText = r2;
+                        document.getElementById('reel3').innerText = r3;
                     }
 
                     document.getElementById('spinBtn').disabled = false;
@@ -188,12 +189,11 @@
         }
 
         function claimCredits() {
-            // Esegue l'accredito quando l'utente clicca sul link sicuro dello sponsor
             setTimeout(() => {
                 credits += 60;
                 document.getElementById('credits').innerText = credits;
                 checkCreditsStatus();
-                updateMessage("✅ +60 Monete accreditate!");
+                updateMessage("✅ +60 Monete accreditate con successo!");
             }, 1000);
         }
 
