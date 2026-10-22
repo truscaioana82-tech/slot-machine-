@@ -5,47 +5,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slot Machine 3x3 Funzionante</title>
     <style>
-        body { font-family: sans-serif; background: #121214; text-align: center; color: white; padding: 20px; margin: 0; }
-        .container { max-width: 450px; margin: 20px auto; background: #1a1a1e; padding: 25px; border-radius: 20px; border: 1px solid #2f2f37; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 1; }
-        h1 { color: #f1c40f; margin-bottom: 10px; }
-        .stats { font-size: 18px; margin-bottom: 20px; }
-        #credits { color: #2ecc71; font-weight: bold; font-size: 24px; }
-        
-        .slot-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 12px; 
-            background: #08080a; 
-            padding: 15px; 
-            border-radius: 15px; 
+        body {
+            font-family: sans-serif;
+            background: #121214;
+            text-align: center;
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 450px;
+            margin: 20px auto;
+            background: #1a1a1e;
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid #2f2f37;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 1;
+        }
+        h1 {
+            color: #f1c40f;
+            margin-bottom: 10px;
+        }
+        .stats {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        #credits {
+            color: #2ecc71;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .slot-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            background: #08080a;
+            padding: 15px;
+            border-radius: 15px;
             border: 4px solid #f1c40f;
             margin-bottom: 25px;
         }
-        
-        .cell { 
-            background: #26262b; 
-            color: white; 
-            font-size: 42px; 
-            height: 90px; 
-            line-height: 90px; 
-            border-radius: 10px; 
-            font-weight: bold; 
-            border: 1px solid #444; 
+        .cell {
+            background: #26262b;
+            color: white;
+            font-size: 42px;
+            height: 90px;
+            line-height: 90px;
+            border-radius: 10px;
+            font-weight: bold;
+            border: 1px solid #444;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
         }
-        
-        .btn { background: #e74c3c; color: white; border: none; padding: 16px; font-size: 22px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; text-transform: uppercase; box-shadow: 0 5px #c0392b; margin-bottom: 12px; }
-        .btn:active { transform: translateY(2px); box-shadow: 0 2px #c0392b; }
-        .btn:disabled { background: #555 !important; box-shadow: none !important; cursor: not-allowed; }
-        
-        .btn-reward { background: #f1c40f; color: #111; border: none; padding: 12px; font-size: 18px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; text-transform: uppercase; box-shadow: 0 5px #f39c12; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-reward:active { transform: translateY(2px); box-shadow: 0 2px #f39c12; }
-
-        #message { font-size: 18px; margin-top: 20px; color: #f1c40f; font-weight: bold; min-height: 26px; }
-
+        .btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            box-shadow: 0 5px #c0392b;
+            margin-bottom: 12px;
+        }
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px #c0392b;
+        }
+        .btn:disabled {
+            background: #555 !important;
+            box-shadow: none !important;
+            cursor: not-allowed;
+        }
+        .btn-reward {
+            background: #f1c40f;
+            color: #111;
+            border: none;
+            padding: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            box-shadow: 0 5px #f39c12;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-reward:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px #f39c12;
+        }
+        #message {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #f1c40f;
+            font-weight: bold;
+            min-height: 26px;
+        }
         /* 🎬 SCHERMO ANIMATO CELEBRATIVO "HAI VINTOOO" */
         #winOverlay {
-            display: none; 
+            display: none;
             position: fixed;
             left: 0;
             top: 0;
@@ -58,7 +124,6 @@
             flex-direction: column;
             overflow: hidden;
         }
-
         .win-text {
             font-size: 44px;
             font-weight: bold;
@@ -68,31 +133,27 @@
             margin-bottom: 10px;
             z-index: 10001; /* Sopra le monete */
         }
-
-        .win-subtext { 
-            font-size: 36px; 
-            color: #2ecc71; 
-            font-weight: bold; 
-            z-index: 10001; 
+        .win-subtext {
+            font-size: 36px;
+            color: #2ecc71;
+            font-weight: bold;
+            z-index: 10001;
         }
-
         @keyframes pulse {
             from { transform: scale(1); }
             to { transform: scale(1.08); }
         }
-
-        /* 🪙 SISTEMATO: CSS PER LE MONETE CADENTI VISIBILI */
-        .coin-particle { 
-            position: absolute; 
-            top: -60px; 
-            font-size: 34px; 
-            z-index: 10000; 
+        /* 🪙 CSS PER LE MONETE CADENTI VISIBILI */
+        .coin-particle {
+            position: absolute;
+            top: -60px;
+            font-size: 34px;
+            z-index: 10000;
             pointer-events: none;
-            animation: fall linear forwards; 
+            animation: fall linear forwards;
         }
-        
-        @keyframes fall { 
-            to { transform: translateY(115vh) rotate(360deg); } 
+        @keyframes fall {
+            to { transform: translateY(115vh) rotate(360deg); }
         }
     </style>
 </head>
@@ -107,9 +168,8 @@
 
     <div class="container">
         <h1>🎰 VEGAS 3X3 SLOT 🎰</h1>
+        <div class="stats">Monete: $<span id="credits">255</span></div>
         
-        <div class="stats">Monete: $<span id="credits">200</span></div>
-
         <div class="slot-grid">
             <div class="cell" id="c0">💖</div><div class="cell" id="c1">🌸</div><div class="cell" id="c2">💎</div>
             <div class="cell" id="c3">😎</div><div class="cell" id="c4">😜</div><div class="cell" id="c5">🔥</div>
@@ -125,7 +185,7 @@
     <script>
         const simboli = ['💖', '🌸', '💎', '😎', '😜', '🔥'];
         const COSTO_GIRO = 5;
-        let monete = 255; // Partiamo dal valore del tuo screenshot!
+        let monete = 255; 
 
         document.getElementById('credits').innerText = monete;
 
@@ -134,7 +194,7 @@
                 document.getElementById('message').innerText = "❌ Monete finite! Ricarica cliccando sotto.";
                 return;
             }
-
+            
             chiudiVincita();
             monete -= COSTO_GIRO;
             document.getElementById('credits').innerText = monete;
@@ -142,17 +202,17 @@
             document.getElementById('message').innerText = "I rulli girano...";
 
             let giriEffettuati = 0;
-            
             let timerAnimazione = setInterval(function() {
                 for (let i = 0; i < 9; i++) {
                     let simCasuale = simboli[Math.floor(Math.random() * simboli.length)];
                     document.getElementById('c' + i).innerText = simCasuale;
                 }
+                
                 giriEffettuati++;
-
+                
                 if (giriEffettuati >= 10) {
                     clearInterval(timerAnimazione);
-
+                    
                     let r0 = simboli[Math.floor(Math.random() * simboli.length)];
                     let r1 = simboli[Math.floor(Math.random() * simboli.length)];
                     let r2 = simboli[Math.floor(Math.random() * simboli.length)];
@@ -179,11 +239,9 @@
                     if (r0 === r1 && r1 === r2) { vincitaTotale += 30; lineeVincenti++; }
                     if (r3 === r4 && r4 === r5) { vincitaTotale += 30; lineeVincenti++; }
                     if (r6 === r7 && r7 === r8) { vincitaTotale += 30; lineeVincenti++; }
-
                     if (r0 === r3 && r3 === r6) { vincitaTotale += 30; lineeVincenti++; }
                     if (r1 === r4 && r4 === r7) { vincitaTotale += 30; lineeVincenti++; }
                     if (r2 === r5 && r5 === r8) { vincitaTotale += 30; lineeVincenti++; }
-
                     if (r0 === r4 && r4 === r8) { vincitaTotale += 50; lineeVincenti++; }
                     if (r2 === r4 && r4 === r6) { vincitaTotale += 50; lineeVincenti++; }
 
@@ -195,7 +253,7 @@
                     } else {
                         document.getElementById('message').innerText = "😢 Non hai vinto. Riprova!";
                     }
-
+                    
                     document.getElementById('spinBtn').disabled = false;
                 }
             }, 100);
@@ -206,18 +264,4 @@
             document.getElementById('winAmountText').innerText = "+$" + importo;
             overlay.style.display = 'flex';
 
-            // Genera la pioggia di elementi grafici visibili a schermo
             const elementi = ['🪙', '💰', '🎉', '✨', '💎'];
-            for (let i = 0; i < 35; i++) {
-                setTimeout(() => {
-                    const moneta = document.createElement('div');
-                    moneta.innerText = elementi[Math.floor(Math.random() * elementi.length)];
-                    moneta.className = 'coin-particle';
-                    moneta.style.left = Math.random() * 90 + 'vw';
-                    moneta.style.animationDuration = (Math.random() * 1.5 + 1.5) + 's';
-                    overlay.appendChild(moneta);
-                    
-                    // Rimuove l'emoticon per non appesantire il telefono dopo la caduta
-                    setTimeout(() => { moneta.remove(); }, 3000);
-                }, i * 80);
-
